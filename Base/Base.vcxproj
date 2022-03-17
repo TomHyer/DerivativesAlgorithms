@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{69357f6a-3938-4a99-9545-95fd4aaea1c0}</ProjectGuid>
+    <RootNamespace>Base</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>IS_BASE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+      <Message>generate code</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>IS_BASE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>generate code</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>IS_BASE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>generate code</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>IS_BASE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>generate code</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Archive.cpp" />
+    <ClCompile Include="Audit.cpp" />
+    <ClCompile Include="Bag.cpp" />
+    <ClCompile Include="Box.cpp" />
+    <ClCompile Include="BuySell.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="CellUtils.cpp" />
+    <ClCompile Include="Date.cpp" />
+    <ClCompile Include="DateTime.cpp" />
+    <ClCompile Include="DateTimeUtils.cpp" />
+    <ClCompile Include="DateUtils.cpp" />
+    <ClCompile Include="Dictionary.cpp" />
+    <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
+    <ClCompile Include="Facts.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="Host.cpp" />
+    <ClCompile Include="Interp.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MatrixArithmetic.cpp" />
+    <ClCompile Include="MatrixUtils.cpp" />
+    <ClCompile Include="NDArray.cpp" />
+    <ClCompile Include="Numerics.cpp" />
+    <ClCompile Include="Splat.cpp" />
+    <ClCompile Include="Storable.cpp" />
+    <ClCompile Include="Strings.cpp" />
+    <ClCompile Include="StringUtils.cpp" />
+    <ClCompile Include="Vectors.cpp" />
+    <ClCompile Include="XLCALL.cpp" />
+    <ClCompile Include="_Cookie.cpp" />
+    <ClCompile Include="_Excel.cpp" />
+    <ClCompile Include="_JNI.cpp" />
+    <ClCompile Include="_Repository.cpp" />
+    <ClCompile Include="__Bag.cpp" />
+    <ClCompile Include="__Box.cpp" />
+    <ClCompile Include="__Date.cpp" />
+    <ClCompile Include="__Interp.cpp" />
+    <ClCompile Include="__Repository.cpp" />
+    <ClCompile Include="__Splat.cpp" />
+    <ClCompile Include="__Test.cpp" />
+    <ClCompile Include="__Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Algorithms.h" />
+    <ClInclude Include="Archive.h" />
+    <ClInclude Include="Audit.h" />
+    <ClInclude Include="Bag.h" />
+    <ClInclude Include="Boolean.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="BuySell.h" />
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="CellUtils.h" />
+    <ClInclude Include="Composite.h" />
+    <ClInclude Include="Credit.h" />
+    <ClInclude Include="Date.h" />
+    <ClInclude Include="DateTime.h" />
+    <ClInclude Include="DateTimeUtils.h" />
+    <ClInclude Include="DateUtils.h" />
+    <ClInclude Include="Dictionary.h" />
+    <ClInclude Include="Environment.h" />
+    <ClInclude Include="Exceptions.h" />
+    <ClInclude Include="Export.h" />
+    <ClInclude Include="Facts.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="Fixings.h" />
+    <ClInclude Include="Functionals.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="Host.h" />
+    <ClInclude Include="Interp.h" />
+    <ClInclude Include="Maps.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MatrixArithmetic.h" />
+    <ClInclude Include="MatrixUtils.h" />
+    <ClInclude Include="NDArray.h" />
+    <ClInclude Include="Numerics.h" />
+    <ClInclude Include="Optionals.h" />
+    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Splat.h" />
+    <ClInclude Include="SquareMatrix.h" />
+    <ClInclude Include="Storable.h" />
+    <ClInclude Include="Strict.h" />
+    <ClInclude Include="Strings.h" />
+    <ClInclude Include="StringUtils.h" />
+    <ClInclude Include="Vectors.h" />
+    <ClInclude Include="XLCALL.h" />
+    <ClInclude Include="_Cookie.h" />
+    <ClInclude Include="_Excel.h" />
+    <ClInclude Include="_JNI.h" />
+    <ClInclude Include="_Reader.h" />
+    <ClInclude Include="_Repository.h" />
+    <ClInclude Include="__Platform.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
