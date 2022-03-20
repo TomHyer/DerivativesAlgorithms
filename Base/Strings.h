@@ -91,12 +91,12 @@ namespace String
 	double ToDouble(const String_& src);	
 	int ToInt(const String_& src);
 	String_ FromDouble(double src);
-	String_ FromInt(int src);
+	BASE_EXPORT String_ FromInt(int src);
 	String_ Condensed(const String_& src);
 	bool Equivalent(const String_& lhs, const char* rhs);
 
 	String_ NextName(const String_& name);
-   String_ Uniquifier(const void* p);
+	String_ Uniquifier(const void* p);
 
 	template<class T_> String_ ToString(const T_& src)
 	{

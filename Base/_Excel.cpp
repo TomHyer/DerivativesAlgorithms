@@ -1521,6 +1521,11 @@ static Vector_<XLMenuItem_> TheMenuItems()
 // Initialization routine
 extern "C" __declspec(dllexport) int xlAutoOpen(void)
 {
+	return Excel::AutoOpen();
+}
+
+BASE_EXPORT int Excel::AutoOpen()
+{
 	// Get XLL file name
 	static OPER_ xDll;
 	(void)XL_CALLBACK(xlGetName, &xDll, 0, 0);	// assumes just a single DLL; ignores registered property

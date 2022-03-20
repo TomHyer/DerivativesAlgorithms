@@ -35,6 +35,7 @@ namespace Log
 
 namespace Excel
 {
+	BASE_EXPORT int AutoOpen();
 	inline void InitializeSessionIfNeeded() {}	// no runtime initialization required
 	BASE_EXPORT double ToDouble(const OPER_* src);
 	BASE_EXPORT std::optional<double> ToDouble(const OPER_* src, bool);	// use overloading to know the return type
@@ -165,19 +166,19 @@ namespace Excel
 		OPER_* ToXloper(const String_& format) const;
 	};
 
-	OPER_* Error
+	BASE_EXPORT OPER_* Error
 		(const String_& what,
-		const char* arg_name);
+		 const char* arg_name);
 
-	void Register
+	BASE_EXPORT void Register
 		(const String_& dll_name,
-		const String_& c_name,
-		const String_& xl_name,
-		const String_& help,
-		const String_& arg_types,
-		const String_& arg_names,
-		const Vector_<String_>& arg_help,
-		bool volatile);
+		 const String_& c_name,
+		 const String_& xl_name,
+		 const String_& help,
+		 const String_& arg_types,
+		 const String_& arg_names,
+		 const Vector_<String_>& arg_help,
+		 bool volatile);
 }
 
 extern "C"
