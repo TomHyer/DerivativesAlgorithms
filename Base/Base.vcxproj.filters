@@ -287,5 +287,8 @@
     <ClInclude Include="Export.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ranges.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

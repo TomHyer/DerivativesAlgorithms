@@ -23,9 +23,9 @@ template<class CS_, class CD_> void Copy(const CS_& src, CD_* dst)
 	std::copy(src.begin(), src.end(), dst->begin());
 }
 
-template<class C_> Vector_<typename C_::value_type> Copy(const C_& src)
+template<class C_> auto Copy(const C_& src)
 {
-	typedef Vector_<typename C_::value_type> vector_t;
+	typedef vector_of<decltype(*src.begin())>::type vector_t;
 	vector_t retval(src.size());
 	std::copy(src.begin(), src.end(), retval.begin());
 	return retval;
@@ -111,14 +111,14 @@ template<class C_, class LT_> C_ Unique(const C_& src, const LT_& less)
 }
 template<class C_> C_ Unique(const C_& src)
 {
-   return Unique(src, std::less<typename C_::value_type>());
+   return Unique(src, std::less<decltype(*src.begin())>());
 }
 
-template<class C_> typename C_::const_iterator LowerBound(const C_& c, const typename C_::value_type& x)
+template<class C_, class E_> typename C_::const_iterator LowerBound(const C_& c, const E_& x)
 {
    return std::lower_bound(c.begin(), c.end(), x);
 }
-template<class C_> typename C_::const_iterator UpperBound(const C_& c, const typename C_::value_type& x)
+template<class C_, class E_> typename C_::const_iterator UpperBound(const C_& c, const E_& x)
 {
    return std::upper_bound(c.begin(), c.end(), x);
 }
@@ -146,13 +146,13 @@ template<class C_, class L_> bool IsMonotonic(const C_& c, const L_& pred)
 }
 template<class C_> bool IsMonotonic(const C_& c)
 {
-	return IsMonotonic(c, std::less<typename C_::value_type>());
+	return IsMonotonic(c, std::less<decltype(*c.begin())>());
 }
 
 // zipping
 template<class C1_, class C2_> auto Zip(const C1_& v1, const C2_& v2) -> Vector_<decltype(make_pair(v1.front(), v2.front()))>
 {
-   auto join = [](const typename C1_::value_type& e1, const typename C2_::value_type& e2) {return make_pair(e1, e2); };
+   auto join = [](const auto& e1, const auto& e2) {return make_pair(e1, e2); };
    return Apply(join, v1, v2);
 }
 
@@ -162,12 +162,8 @@ template<class P_> typename P_::second_type GetSecond(const P_& pair) { return p
 
 template<class C_> typename vector_of<typename C_::key_type>::type Keys(const C_& src)
 {
-	typedef typename C_::value_type value_t;
-	typedef typename vector_of<typename C_::key_type>::type vector_t;
-	auto op = [](const value_t& kv){return kv.first; };//std::ptr_fun(GetFirst<C_::value_type>);
-	vector_t retval(src.size());
-	Transform(src, op, &retval);
-	return retval;
+	auto op = [](const decltype(*src.begin())& kv) { return kv.first; };
+	return Apply(op, src);
 }
 
 template<class C_> typename ::Vector_<typename C_::mapped_type> MapValues(const C_& src)

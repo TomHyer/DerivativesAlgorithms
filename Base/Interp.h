@@ -26,7 +26,7 @@ class BASE_EXPORT Interp1Linear_ : public Interp1_
 {
 	Vector_<> x_, f_;
 public:
-	Interp1Linear_(const String_& name, const Vector_<>& x, const Vector_<>& f);
+	Interp1Linear_(const String_& name, Range_<> x, const Vector_<>& f);
 	Interp1Linear_(const String_& name, const std::map<double, double>& f);
 	void Write(Archive::Store_& dst) const override;
 	double operator()(double x) const override;

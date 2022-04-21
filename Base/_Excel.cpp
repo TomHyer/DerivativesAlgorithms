@@ -866,11 +866,7 @@ Date_ Excel::ToDate(const OPER_* src, bool optional)
       return Date_();
    }
    if (Cell::IsDouble(c))
-   {
-      const int id = AsInt(c.d_);
-      REQUIRE(id == c.d_, "Can't construct a date from a non-integer number");
-      return Date::FromExcel(id);
-   }
+      return Date::FromExcel(Cell::ToInt(c));
    return Cell::ToDate(c);
 }
 
@@ -884,8 +880,9 @@ DateTime_ Excel::ToDateTime(const OPER_* src, bool optional)
 	}
 	if (Cell::IsDouble(c))
 	{
-		const int id = AsInt(c.d_);
-		return DateTime_(Date::FromExcel(id), c.d_ - id);
+		const double d = Cell::ToDouble(c);
+		const int id = AsInt(d);
+		return DateTime_(Date::FromExcel(id), d - id);
 	}
 	return Cell::ToDateTime(c);
 }
@@ -1283,33 +1280,16 @@ namespace
 		OPER_* dst_;
 		ExcelWriter_(OPER_* dst) : dst_(dst) {}
 
+		void operator()(const String_& s) { WriteToOper(s, dst_); }
+		void operator()(double d) { dst_->xltype = xltypeNum; dst_->val.num = d; }
+		void operator()(bool b) { dst_->xltype = xltypeBool; dst_->val.xbool = b ? 1 : 0; }
+		void operator()(const Date_& dt) { dst_->xltype = xltypeNum; dst_->val.num = Date::ToExcel(dt); }
+		void operator()(const DateTime_& dt) { dst_->xltype = xltypeNum; dst_->val.num = Date::ToExcel(dt.Date()) + dt.Frac(); }
+		void operator()(std::monostate) { WriteToOper(String_(), dst_); }
+
 		void operator()(const Cell_& c)
 		{
-			static const String_ EMPTY;
-			switch (c.type_)
-			{
-			case Cell::Type_::STRING:
-				WriteToOper(c.s_, dst_);
-				break;
-			case Cell::Type_::NUMBER:
-				dst_->xltype = xltypeNum;
-				dst_->val.num = c.d_;
-				break;
-			case Cell::Type_::BOOLEAN:
-				dst_->xltype = xltypeBool;
-				dst_->val.xbool = c.b_ ? 1 : 0;
-				break;
-			case Cell::Type_::DATE:
-			case Cell::Type_::DATETIME:
-				dst_->xltype = xltypeNum;
-				dst_->val.num = Date::ToExcel(c.dt_.Date()) + c.dt_.Frac();
-				break;
-			case Cell::Type_::EMPTY:
-				WriteToOper(EMPTY, dst_);
-				break;
-			default:
-				THROW("Unrecognizable cell type");
-			}
+			return c.Visit(*this);
 		}
 	};
 }	// leave local namespace

@@ -55,12 +55,6 @@ String_ DateTime::TimeString(const DateTime_& dt)
 	return retval;
 }
 
-bool operator<(const DateTime_& lhs, const DateTime_& rhs)
-{
-   return lhs.Date() < rhs.Date()
-      || (lhs.Date() == rhs.Date() && lhs.Frac() < rhs.Frac());
-}
-
 DateTime_ DateTime::Minimum()
 {
 	return DateTime_(Date::Minimum(), 0);
@@ -76,3 +70,4 @@ long long DateTime::MSec(const DateTime_& dt)
 	long long days = dt.Date() - Date::Minimum();
 	return 86400000 * days + static_cast<long long>(86400000 * dt.Frac());
 }
+

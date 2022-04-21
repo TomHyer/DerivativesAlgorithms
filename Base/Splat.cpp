@@ -130,9 +130,9 @@ namespace
 		}
 
 		void operator=(double d) override { SetScalar(d); }
-      void operator=(const Date_& d) override { SetScalar(d); }
-      void operator=(const String_& s) override { SetScalar(s); }
-      void operator=(const Vector_<>& v) override { SetVector(v); }
+		void operator=(const Date_& d) override { SetScalar(d); }
+		void operator=(const String_& s) override { SetScalar(s); }
+		void operator=(const Vector_<>& v) override { SetVector(v); }
 		void operator=(const Vector_<int>& v) override { SetVector(v); }
 		void operator=(const Vector_<bool>& v) override { SetVector(v); }
 		void operator=(const Vector_<String_>& v) override { SetVector(v); }
@@ -155,18 +155,17 @@ namespace
 
 	//------------------------------------------------------------------------
 	// helper functions for UnSplat
+	struct ExtractDouble_
+	{
+		double operator()(double d) const { return d; }
+		double operator()(const String_& s) const { return String::ToDouble(s); }
+		template<class T_> double operator()(T_) const { THROW("Can't create a number from a non-numeric type"); }
+	};
 	double ExtractDouble(const Cell_& src)
 	{
-		switch (src.type_)
-		{
-		case Cell_::Type_::NUMBER:
-			return src.d_;
-		case Cell_::Type_::STRING:
-			return String::ToDouble(src.s_);
-		default:
-			THROW("Can't create a number from a non-numeric type");
-		}
+		return src.Visit(ExtractDouble_());
 	}
+
 	int ExtractInt(const Cell_& src)
 	{
 		const double d = ExtractDouble(src);
@@ -174,58 +173,52 @@ namespace
 		REQUIRE(retval == d, "Non-integer value not expected");
 		return retval;
 	}
+	
+	struct ExtractBool_
+	{
+		bool operator()(bool b) const { return b; }
+		bool operator()(const String_& s) const { return String::ToBool(s); }
+		template<class T_> bool operator()(T_) const { THROW("Can't create a boolean from cell"); }
+	};
 	bool ExtractBool(const Cell_& src)
 	{
-		switch (src.type_)
-		{
-		case Cell_::Type_::BOOLEAN:
-			return src.b_;
-		case Cell_::Type_::STRING:
-			return String::ToBool(src.s_);
-		default:
-			THROW("Can't construct a boolean flag from a non-boolean value");
-		}
+		return src.Visit(ExtractBool_());
 	}
+
+	struct ExtractString_
+	{
+		const String_& operator()(const String_& s) const { return s; }
+		const String_& operator()(std::monostate) const { static const String_ EMPTY; return EMPTY; }	// should only occur in the interior of a table
+		template<class T_> const String_& operator()(T_) const { THROW("Can't create a string from cell"); }
+	};
 	String_ ExtractString(const Cell_& src)
 	{
-		switch (src.type_)
-		{
-		case Cell_::Type_::EMPTY:
-			return String_();	// should only occur in the interior of a table
-		case Cell_::Type_::STRING:
-			return src.s_;
-		default:
-			THROW("Can't construct a String_ from a non-text value");
-		}
+		return src.Visit(ExtractString_());
 	}
+
+	struct ExtractDate_
+	{
+		Date_ operator()(const String_& s) const { return Date::FromString(s); }
+		Date_ operator()(const Date_& dt) const { return dt; }
+		Date_ operator()(std::monostate) const { return Date_(); }	// should only occur in the interior of a table
+		template<class T_> Date_ operator()(T_) const { THROW("Can't create a date from cell"); }
+	};
 	Date_ ExtractDate(const Cell_& src)
 	{
-		switch (src.type_)
-		{
-		case Cell_::Type_::EMPTY:
-			return Date_();	// should only occur in the interior of a table
-		case Cell_::Type_::STRING:
-			return Date::FromString(src.s_);
-		case Cell_::Type_::DATE:
-			return src.dt_.Date();
-		default:
-			THROW("Can't construct a Date_ from a non-date value");
-		}
+		return src.Visit(ExtractDate_());
 	}
+
+	struct ExtractDateTime_
+	{
+		DateTime_ operator()(const String_& s) const { return DateTime::FromString(s); }
+		DateTime_ operator()(const Date_& dt) const { return DateTime_(dt, 0.0); }	// allow promotion
+		DateTime_ operator()(const DateTime_& dt) const { return dt; }
+		DateTime_ operator()(std::monostate) const { return DateTime_(); }	// should only occur in the interior of a table
+		template<class T_> DateTime_ operator()(T_) const { THROW("Can't create a datetime from cell"); }
+	};
 	DateTime_ ExtractDateTime(const Cell_& src)
 	{
-		switch (src.type_)
-		{
-		case Cell_::Type_::EMPTY:
-			return DateTime_();	// should only occur in the interior of a table
-		case Cell_::Type_::STRING:
-			return DateTime::FromString(src.s_);
-		case Cell_::Type_::DATE:	// allow promotion of dates here
-		case Cell_::Type_::DATETIME:
-			return src.dt_;
-		default:
-			THROW("Can't construct a Date_ from a non-date value");
-		}
+		return src.Visit(ExtractDateTime_());
 	}
 
    template<class R_, class T_> auto TranslateRange(const R_& range, const T_& translate)
@@ -250,22 +243,19 @@ namespace
 		String_ Type() const override
 		{
 			const Cell_& c = data_(rowStart_, colStart_);
-         if (c.type_ != Cell_::Type_::STRING)
-            return String_();
-         if (auto pt = c.s_.find(OBJECT_PREFACE); pt != String_::npos)
-             return c.s_.substr(pt + OBJECT_PREFACE.size());
-         return String_();
+			if (auto p = std::get_if<String_>(&c.val_))
+				if (auto pt = p->find(OBJECT_PREFACE); pt != String_::npos)
+					return p->substr(pt + OBJECT_PREFACE.size());
+			return String_();
 		}
-      String_ Tag() const
-      {
-         const Cell_& c = data_(rowStart_, colStart_);
-         if (c.type_ != Cell_::Type_::STRING)
-            return String_();
-         if (c.s_.substr(0, TAG_PREFACE.size()) != TAG_PREFACE)
-            return String_();
-         auto pt = c.s_.find(OBJECT_PREFACE);
-         return c.s_.substr(0, pt);
-      }
+
+		String_ Tag() const
+		{
+			const Cell_& c = data_(rowStart_, colStart_);
+			if (auto p = std::get_if<String_>(&c.val_); p && p->substr(0, TAG_PREFACE.size()) == TAG_PREFACE)
+				return p->substr(0, p->find(OBJECT_PREFACE));
+			return String_();
+		}
 
 		const View_& Child(const String_& name) const override
 		{

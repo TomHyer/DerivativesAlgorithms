@@ -14,17 +14,15 @@ public:
 	explicit DateTime_(const Date_& date, double frac = 0.0);
 	explicit DateTime_(long long msec);	// convert from unix-era time
 	DateTime_(const Date_& date, int hour, int minute = 0, int second = 0);
+
+	bool operator==(const DateTime_&) const = default;
+	auto operator<=>(const DateTime_&) const = default;
+
 	inline Date_ Date() const { return date_; }
 	inline double Frac() const { return 0.0000152587890625 * frac_; }
-	inline bool operator==(const DateTime_& rhs) const { return date_ == rhs.date_ && frac_ == rhs.frac_; }
 };
 
 BASE_EXPORT double operator-(const DateTime_& lhs, const DateTime_& rhs);
-BASE_EXPORT bool operator<(const DateTime_& lhs, const DateTime_& rhs);
-inline bool operator>(const DateTime_& lhs, const DateTime_& rhs) { return rhs < lhs; }
-inline bool operator<=(const DateTime_& lhs, const DateTime_& rhs) { return !(rhs < lhs); }
-inline bool operator>=(const DateTime_& lhs, const DateTime_& rhs) { return !(lhs < rhs); }
-inline bool operator!=(const DateTime_& lhs, const DateTime_& rhs) { return !(lhs == rhs); }
 
 namespace DateTime
 {

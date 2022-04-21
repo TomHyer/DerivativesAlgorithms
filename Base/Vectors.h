@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "Ranges.h"
 #include <vector>
 #include <algorithm>
 #include "Export.h"
@@ -53,6 +54,10 @@ public:
 	using std::vector<E_>::operator[];
 	using std::vector<E_>::reserve;
 	using std::vector<E_>::clear;
+
+	operator Range_<const E_*>() const { return empty() ? Range_<const E_*>() : Range_<const E_*>(&front(), &back()); }
+	operator Range_<double*>() const { return empty() ? Range_<E_*>() : Range_<E_*>(&front(), &back()); }
+	template<class I_> explicit Vector_(const Range_<I_>& src) : base_t(src.begin(), src.end()) {}
 };
 
 namespace Vector

@@ -8,7 +8,7 @@
 
 Interp1_::Interp1_(const String_& name) : Storable_("Interp1", name) {}
 
-Interp1Linear_::Interp1Linear_(const String_& name, const Vector_<>& x, const Vector_<>& f) : Interp1_(name), x_(x), f_(f)
+Interp1Linear_::Interp1Linear_(const String_& name, Range_<> x, const Vector_<>& f) : Interp1_(name), x_(x.begin(), x.end()), f_(f)
 {
 	assert(x.size() == f.size());
 	assert(IsMonotonic(x, std::less_equal<double>()));

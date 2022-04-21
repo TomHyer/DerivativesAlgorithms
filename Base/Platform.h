@@ -27,6 +27,7 @@ template<class T> using scoped_ptr = const std::unique_ptr<T>;
 // whenever a class takes a default template type, the compiler insists on seeing the default exactly once
 	// thus the default must be here, or else in the header
 		// thus anything we want to forward-declare, we must forward-declare here
+template<class I_ = const double*> class Range_;
 template<class E_ = double> class Vector_;
 template<class E_ = double> class Matrix_;
 template<class E_ = double> class SquareMatrix_;

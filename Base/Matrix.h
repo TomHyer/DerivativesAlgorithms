@@ -95,8 +95,7 @@ public:
 			Iterator_ operator+(size_t inc) { Iterator_ ret(*this); ret.val_ += inc * stride_; return ret; }
 			typename RI_::reference operator*() { return *val_; }
 			bool operator==(const Iterator_& rhs) const { assert(stride_ == rhs.stride_); return val_ == rhs.val_; }
-			bool operator!=(const Iterator_& rhs) const { return !this->operator==(rhs); }
-			bool operator<(const Iterator_& rhs) const { return val_ < rhs.val_; }
+			auto operator<=>(const Iterator_& rhs) const { assert(stride_ == rhs.stride_); return val_.operator<=>(rhs.val_); }
 			typename RI_::difference_type operator-(const Iterator_& rhs) const { assert(stride_ == rhs.stride_); assert((val_ - rhs.val_) % stride_ == 0); return (val_ - rhs.val_) / stride_; }
 			typedef typename std::vector<E_>::iterator::iterator_category iterator_category;
 			typedef typename std::vector<E_>::iterator::difference_type difference_type;

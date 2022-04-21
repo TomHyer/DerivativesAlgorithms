@@ -25,7 +25,7 @@ f is handle Interp1
 
    void Interp1_New_Linear
       (const String_& name,
-       const Vector_<>& x,
+       Range_<> x,
        const Vector_<>& y,
        Handle_<Interp1_>* f)
    {

@@ -243,6 +243,7 @@
     <ClInclude Include="Numerics.h" />
     <ClInclude Include="Optionals.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="Ranges.h" />
     <ClInclude Include="Splat.h" />
     <ClInclude Include="SquareMatrix.h" />
     <ClInclude Include="Storable.h" />

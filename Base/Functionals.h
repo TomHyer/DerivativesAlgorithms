@@ -54,7 +54,7 @@ template<class C_, class XK_ = C_> struct ArrayFunctor_
 {
 	XK_ val_;
 	ArrayFunctor_(const C_& val) : val_(val) {}
-	const typename C_::value_type& operator()(int ii) const { return val_[ii]; }
+	const auto& operator()(int ii) const { return val_[ii]; }
 };
 
 template<class C_> ArrayFunctor_<C_, const C_&> XLookupIn(const C_& src)	// returns an ephemeral class containing a reference to src

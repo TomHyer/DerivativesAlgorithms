@@ -39,9 +39,9 @@ struct Loc_
 	int ICell() const { return row_ * 9 + col_; }
 	Loc_(int i_cell) : row_(short(i_cell / 9)), col_(short(i_cell % 9)) { region_ = 3 * (row_ / 3) + (col_ / 3); }
 	Loc_(short r, short c) : row_(r), col_(c) { region_ = 3 * (row_ / 3) + (col_ / 3); }
+	auto operator<=> (const Loc_&) const = default;
 };
 bool operator&(const Loc_& lhs, const Loc_& rhs) { return lhs.row_ == rhs.row_ || lhs.col_ == rhs.col_ || lhs.region_ == rhs.region_; }
-bool operator<(const Loc_& lhs, const Loc_& rhs) { return lhs.row_ < rhs.row_ || (lhs.row_ == rhs.row_ && lhs.col_ < rhs.col_); }
 
 struct Grid_
 {
@@ -502,7 +502,7 @@ String_ ObscureSolution(const Grid_& grid)
 
 const Cell_& operator&(const Cell_& lhs, const Cell_& rhs)
 {
-	return lhs.type_ == Cell_::Type_::EMPTY ? lhs : rhs;
+	return Cell::IsEmpty(lhs) ? lhs : rhs;
 }
 
 Matrix_<Cell_> KS(double entropy, int seed, bool minimal)

@@ -35,12 +35,13 @@ class BASE_EXPORT Date_
 	uint16_t serial_;	// days from start of unix era
 	friend Date_ Date::FromExcel(int);
 	friend int Date::ToExcel(const Date_&);
-	friend bool operator==(const Date_& lhs, const Date_& rhs);
-	friend bool operator<(const Date_& lhs, const Date_& rhs);
 public:
 	Date_() : serial_(0) {}	// invalid value
 	Date_(int yyyy, int mm, int dd);
 	Date_(const Date_& src) : serial_(src.serial_) {}
+
+	bool operator==(const Date_&) const = default;
+	auto operator<=>(const Date_&) const = default;
 
 	bool IsValid() const { return serial_ > 0; }
 	Date_& operator=(const Date_& rhs) { serial_ = rhs.serial_; return *this; }
@@ -49,12 +50,6 @@ public:
 	inline Date_& operator--() { --serial_; return *this; }
 };
 
-inline bool operator==(const Date_& lhs, const Date_& rhs) { return lhs.serial_ == rhs.serial_; }
-inline bool operator!=(const Date_& lhs, const Date_& rhs) { return !(lhs == rhs); }
-inline bool operator<(const Date_& lhs, const Date_& rhs) { return lhs.serial_ < rhs.serial_; }
-inline bool operator>(const Date_& lhs, const Date_& rhs) { return rhs < lhs; }
-inline bool operator<=(const Date_& lhs, const Date_& rhs) { return !(rhs < lhs); }
-inline bool operator>=(const Date_& lhs, const Date_& rhs) { return !(lhs < rhs); }
 int operator-(const Date_& lhs, const Date_& rhs);
 
 // support interpolation based on date
