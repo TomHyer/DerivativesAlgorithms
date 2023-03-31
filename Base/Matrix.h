@@ -129,6 +129,7 @@ public:
 		iterator begin() const { return ConstCol_::begin_; }
 		iterator end() const { return iterator(ConstCol_::begin_.val_ + ConstCol_::size_ * ConstCol_::begin_.stride_, ConstCol_::begin_.stride_); }
 		E_& operator[](int row) { return *(ConstCol_::begin_.val_ + row * ConstCol_::begin_.stride_); }
+		const E_& operator[](int row) const { return *(ConstCol_::begin_.val_ + row * ConstCol_::begin_.stride_); }
 
 		using ConstCol_::size;
 	};

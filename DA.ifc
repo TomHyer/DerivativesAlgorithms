@@ -10,15 +10,9 @@ public
 	DotNetHeader
 ->MG_#_public.htm
 	HtmlHelp
-->MG_#_public.jl
-	JuliaWrapper
 object|settings|storable|record
-->MG_#_object.inc
-	C++Source
 ->MG_#_object.h
 	ClassDef
-->MG\#_object.java
-	JavaRecord
 ->MG_%_()%?{%_(version)}{_v%_(version)}_Write.inc
 	CWrite
 ->MG_%_()%?{%_(version)}{_v%_(version)}_Read.inc
@@ -30,6 +24,3 @@ enumeration
 	C++Header
 ->MG\#.java
 	JavaClass
-dir
-->MG_#_Julia.jl
-	JuliaIncludes

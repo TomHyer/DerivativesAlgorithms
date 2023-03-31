@@ -2,6 +2,7 @@
 #pragma once
 
 #include <numeric>
+#include "Export.h"
 
 int AsInt(double src);
 int AsInt(std::ptrdiff_t src);

@@ -1,0 +1,34 @@
+#pragma once
+
+#include "Bit.h"
+#include "PawnEval.h"
+
+struct GMaterial;
+struct GEvalInfo
+{
+	std::array<uint64, 2> area, free, klocus;
+	uint64 occ, rray, bray;
+	GPawnEntry* PawnEntry;
+	const GMaterial* material;
+	packed_t score;
+	std::array<uint32, 2> king_att;
+	std::array<uint16, 2> king;
+	uint16 mul;
+};
+
+// special calculators for specific material
+// irritatingly, they need to be told what pop() to use
+// setting any of these to call also triggers a call to eval_stalemate
+// so they should never call eval_stalemate themselves
+typedef void(*eval_special_t)(GEvalInfo& EI, pop_func_t pop);
+// here is a function that exists only to trigger eval_stalemate
+inline void eval_null(GEvalInfo&, pop_func_t) {}
+inline void eval_unwinnable(GEvalInfo& EI, pop_func_t) { EI.mul = 0; }
+
+struct GMaterial
+{
+	sint16 score, closed;
+	std::array<eval_special_t, 2> eval;
+	std::array<uint8, 2> mul;
+	uint8 phase;
+};

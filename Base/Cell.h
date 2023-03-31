@@ -10,13 +10,14 @@ struct BASE_EXPORT Cell_
 	std::variant<bool, double, Date_, DateTime_, String_, std::monostate> val_;
 
 	Cell_() : val_(std::monostate()) {}
+	Cell_(const Cell_&) = default;
 	explicit Cell_(bool b) : val_(b) {}
 	Cell_(double d) : val_(d) {}
 	Cell_(const Date_& dt) : val_(dt) {}
 	Cell_(const DateTime_& dt) : val_(dt) {}
 	Cell_(const String_& s) : val_(s) {}
 	Cell_(const char* s) : val_(String_(s))	{}	// otherwise pointer can be converted to boolean
-	template<class T_> Cell_(const T_* p) { static_assert(false); }	// unrecognized pointer type, hides ptr-to-bool conversion
+	template<class T_> Cell_(const T_* p) = delete;	// unrecognized pointer type, hides ptr-to-bool conversion
 
 	bool operator==(const Cell_& rhs) const = default;
 

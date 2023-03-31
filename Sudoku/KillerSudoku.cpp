@@ -587,4 +587,3 @@ Matrix_<Cell_> KS(double entropy, int seed, bool minimal)
 	retval(27, 7) = Entropy(groups, grid);
 	return retval;
 }
-
