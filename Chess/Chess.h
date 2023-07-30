@@ -43,5 +43,5 @@ constexpr uint8 Black = 1;
 
 // by convention, mover/evaluator is 'me'
 #define opp (1 ^ (me))
-#define MY_TURN (!Current->turn == opp)
+#define MY_TURN(state) (!(state).current_->turn == opp)
 #define TEMPLATE_ME(f) (me ? f<1> : f<0>)

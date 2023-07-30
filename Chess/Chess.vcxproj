@@ -157,6 +157,7 @@
     <ClInclude Include="EvalImp.h" />
     <ClInclude Include="Fathom_fwd.h" />
     <ClInclude Include="Futility.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Killer.h" />
     <ClInclude Include="Locus.h" />
     <ClInclude Include="Magic.h" />
@@ -170,6 +171,10 @@
     <ClInclude Include="Roc.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Shared.h" />
+    <ClInclude Include="SMP.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="Threads.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Weights.h" />
   </ItemGroup>
   <ItemGroup>

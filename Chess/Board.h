@@ -3,6 +3,7 @@
 #include "Chess.h"
 #include "Array.h"
 #include "BoardImpl.h"
+#include "Piece.h"
 
 using Loc_ = uint8;
 
@@ -55,3 +56,33 @@ template<bool me> INLINE uint64 Shift(const uint64& target)
 	return me ? target >> 8 : target << 8;
 }
 
+struct Board_
+{
+	std::array<uint8, 64> square;
+	std::array<uint64, 16> bb;
+
+	// lots of query functions
+	INLINE uint8& PieceAt(int sq) { return square[sq]; }
+	INLINE const uint8& PieceAt(int sq) const { return square[sq]; }
+	INLINE uint64& Piece(int i) { return bb[i]; }
+	INLINE const uint64& Piece(int i) const { return bb[i]; }
+
+	INLINE uint64& Pawn(int me) { return Piece(WhitePawn | me); }
+	INLINE const uint64& Pawn(int me) const { return Piece(WhitePawn | me); }
+	INLINE uint64& Knight(int me) { return Piece(WhiteKnight | me); }
+	INLINE const uint64& Knight(int me) const { return Piece(WhiteKnight | me); }
+	INLINE uint64 Bishop(int me) const { return Piece(WhiteLight | me) | Piece(WhiteDark | me); }
+	INLINE uint64& Rook(int me) { return Piece(WhiteRook | me); }
+	INLINE const uint64& Rook(int me) const { return Piece(WhiteRook | me); }
+	INLINE uint64& Queen(int me) { return Piece(WhiteQueen | me); }
+	INLINE const uint64& Queen(int me) const { return Piece(WhiteQueen | me); }
+	INLINE uint64& King(int me) { return Piece(WhiteKing | me); }
+	INLINE const uint64& King(int me) const { return Piece(WhiteKing | me); }
+	INLINE uint64 NonPawn(int me) const { return Piece(me) ^ Pawn(me); }
+	INLINE uint64 NonPawnKing(int me) const { return NonPawn(me) ^ King(me); }
+	INLINE uint64 Major(int me) const { return Rook(me) | Queen(me); }
+	INLINE uint64 Minor(int me) const { return Knight(me) | Bishop(me); }
+	INLINE uint64 PieceAll() const { return Piece(White) | Piece(Black); }
+	INLINE uint64 PawnAll() const { return Pawn(White) | Pawn(Black); }
+	INLINE uint64 NonPawnKingAll() const { return NonPawnKing(White) | NonPawnKing(Black); }
+};

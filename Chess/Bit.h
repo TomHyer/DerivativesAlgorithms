@@ -15,6 +15,10 @@ INLINE void Cut(uint64& x)
 	x = _blsr_u64(x);
 }
 #endif
+constexpr void Cut_c(uint64& x)
+{
+	x &= x - 1;
+}
 
 INLINE int lsb(uint64 x)
 {
@@ -28,6 +32,22 @@ INLINE int msb(uint64 x)
 	unsigned long y;
 	_BitScanReverse64(&y, x);
 	return y;
+}
+
+constexpr int lsb_c(uint64 x)
+{
+	int retval = 0;
+	while (x && !(x & 1))
+		++retval, x >>= 1;
+	return retval;
+}
+
+constexpr int msb_c(uint64 x)
+{
+	int retval = 0;
+	while (x > 1)
+		++retval, x >>= 1;
+	return retval;
 }
 
 INLINE int popcnt(uint64 x)
