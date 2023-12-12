@@ -4,6 +4,7 @@
 #include <time.h>
 #include <set>
 #include <map>
+#include <array>
 #include "Base/Optionals.h"
 #include "Base/Strings.h"
 #include "Base/Numerics.h"
@@ -262,25 +263,26 @@ Grid_ LastSolution
 
 //----------------------------------------------------------------------------
 
-int Combinations(int n, int sum, int max = 9)
+constexpr std::array<std::array<int, 46>, 10> MakeCombinations()
 {
-	if (n < 0 || n > max || sum < 0)
-		return 0;
-	if (2 * n > max)
-		return Combinations(max - n, (max * (max + 1)) / 2 - sum);
-	if (2 * sum > (max + 1) * n)
-		return Combinations(n, (max + 1) * n - sum);
-	if (n == 0)
-		return sum == 0 ? 1 : 0;
-	if (n == 1)
-		return (sum > 0 && sum <= max) ? 1 : 0;
-	return Combinations(n - 1, sum - n, max - 1) + Combinations(n, sum - n, max - 1);
+	std::array<std::array<int, 46>, 10> retval = {};
+	for (int ii = 0; ii < 512; ++ii)
+	{
+		int n = 0, s = 0;
+		for (int jj = 1; jj <= 9; ++jj)
+			if (ii & (1 << (jj - 1)))
+				++n, s += jj;
+		if (n >= 0 && n <= 9 && s >= 0 && s <= 45)	// satisfy MSVC with unnecessary check
+			++retval[n][s];
+	}
+	return retval;
 }
+constexpr std::array<std::array<int, 46>, 10> Combinations = MakeCombinations();
 
 double Entropy(int n, int sum)
 {
 	static const double LGE = 1.0 / log(2.0);
-	int np = Combinations(n, sum);
+	int np = Combinations[n][sum];
 	while (n > 0)
 		np *= n--;
 	return log(double(np)) * LGE;
@@ -297,8 +299,8 @@ double Entropy(const Group_& group, const Grid_& grid)
 
 double Entropy(const Vector_<Group_>& groups, const Grid_& grid)
 {
-	return accumulate(
-			groups.begin(), groups.end(), 0.0, [&](double sofar, const Group_& group) { return sofar + Entropy(group, grid); });
+	auto inc = [&](double sofar, const Group_& group) { return sofar + Entropy(group, grid); };
+	return accumulate(groups.begin(), groups.end(), 0.0, inc);
 }
 
 Vector_<Group_> UnitGroups()
