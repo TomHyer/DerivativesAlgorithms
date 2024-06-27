@@ -24,7 +24,6 @@
 #define ENV_ADD_PTR(f) X_ENV_FACT(__COUNTER__, f)
 #define ENV_SEED_PTR(f) _ENV = nullptr; ENV_ADD_PTR(f)
 
-
 namespace Environment
 {
 	struct BASE_EXPORT Entry_ : noncopyable

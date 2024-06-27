@@ -33,6 +33,18 @@ namespace Calc
 
 	constexpr std::array<uint64, 8> File = { Calc::FileA, Calc::FileA << 1, Calc::FileA << 2, Calc::FileA << 3, Calc::FileA << 4, Calc::FileA << 5, Calc::FileA << 6, Calc::FileA << 7 };
 	constexpr std::array<uint64, 8> Line = { Calc::Line0, (Calc::Line0 << 8), (Calc::Line0 << 16), (Calc::Line0 << 24), (Calc::Line0 << 32), (Calc::Line0 << 40), (Calc::Line0 << 48), (Calc::Line0 << 56) };
+	constexpr std::array<uint64, 8> MakePIsolated()
+	{
+		std::array<uint64, 8> retval = {};
+		for (size_t i = 0; i < 8; ++i)
+		{
+			if (i > 0)
+				retval[i] |= File[i - 1];
+			if (i < 7)
+				retval[i] |= File[i + 1];
+		}
+		return retval;
+	}
 
 	template<typename PRED_> constexpr uint64 BuildBB(PRED_ pred, int sq, int n = 64)
 	{
@@ -100,15 +112,6 @@ namespace Calc
 	constexpr uint64 ForwardB(int rank)
 	{
 		return rank > 0 ? Line[rank - 1] | ForwardB(rank - 1) : 0ull;
-	}
-
-	constexpr bool IsBetween(int from, int sq, int to)
-	{
-		return ((from > sq && sq > to) || (from < sq&& sq < to))
-			&& ((RankOf(from) == RankOf(sq) && RankOf(sq) == RankOf(to))
-				|| (FileOf(from) == FileOf(sq) && FileOf(sq) == FileOf(to))
-				|| (NDiagOf(from) == NDiagOf(sq) && NDiagOf(sq) == NDiagOf(to))
-				|| (SDiagOf(from) == SDiagOf(sq) && SDiagOf(sq) == SDiagOf(to)));
 	}
 }	// leave Calc
 constexpr std::array<uint64, 64> HLine = make_array<64>(Calc::HLine);
@@ -181,5 +184,55 @@ namespace Calc
 	INLINE uint64 ShiftSW(const uint64& target)
 	{
 		return (target & (~(File[0] | Line[0]))) >> 9;
+	}
+
+	constexpr bool IsBetween(int from, int sq, int to)
+	{
+		return ((from > sq && sq > to) || (from < sq && sq < to))
+			&& ((RankOf(from) == RankOf(sq) && RankOf(sq) == RankOf(to))
+				|| (FileOf(from) == FileOf(sq) && FileOf(sq) == FileOf(to))
+				|| (NDiagOf(from) == NDiagOf(sq) && NDiagOf(sq) == NDiagOf(to))
+				|| (SDiagOf(from) == SDiagOf(sq) && SDiagOf(sq) == SDiagOf(to)));
+	}
+
+	constexpr std::array<std::array<uint64, 64>, 64> MakeBetween()
+	{
+		std::array<std::array<uint64, 64>, 64> retval;
+		for (int i = 0; i < 64; ++i)
+		{
+			retval[i] = {};
+			for (uint64 u = QMask(i); T(u); Cut_c(u))
+			{
+				int j = lsb_c(u);
+				int k = Sgn(RankOf(j) - RankOf(i));
+				int l = Sgn(FileOf(j) - FileOf(i));
+				for (int n = i + 8 * k + l; n != j; n += (8 * k + l))
+					retval[i][j] |= Bit(n);
+			}
+		}
+
+		return retval;
+	}
+
+	constexpr std::array<std::array<uint64, 64>, 64> MakeFullLine()
+	{
+		std::array<std::array<uint64, 64>, 64> retval;
+		for (int i = 0; i < 64; ++i)
+		{
+			retval[i] = {};
+			uint64 b = BMask(i), r = RMask(i);
+			for (uint64 u = b; T(u); Cut_c(u))
+			{
+				int j = lsb_c(u);
+				retval[i][j] = b & BMask(j);
+			}
+			for (uint64 u = r; T(u); Cut_c(u))
+			{
+				int j = lsb_c(u);
+				retval[i][j] = r & RMask(j);
+			}
+		}
+
+		return retval;
 	}
 }

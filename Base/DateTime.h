@@ -1,5 +1,5 @@
 
-// compact datetime -- stores dates as in class Date_, plus times with ~1 second resolution
+// compact timepoint -- stores dates as in class Date_, plus times with ~1 second resolution
 
 #pragma once
 

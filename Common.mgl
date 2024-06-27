@@ -1,0 +1,35 @@
+%:ExportClass:%UpperCase<%DLLShortName()>_EXPORT`
+%:ExportFunc:%ExportClass()`
+%:SeedEnv:ENV_SEED_TYPE(ObjectAccess_);
+%:PassEnv:_env, `
+%:BaseDir:Base`
+`
+`
+%:ScalarCType:%@{%_(type)} {`
+number{double} `
+integer{int} `
+boolean{bool} `
+string{String_} `
+date{Date_} `
+timepoint{DateTime_} `
+cell{Cell_} `
+dictionary{Dictionary_} `
+handle{Handle_%CSubTypeAngleBracket()} `
+enum|settings|record{%(subtype)_} `
+long{std::uint64_t} `
+{:::}}`
+`
+%:ScalarDescription:%@{%_(type)} {`
+time{date_time} `
+{%_(type)}}`
+`
+%:TemplateQualifier:%|{%?{%_(subtype)}{<%PascalCase(subtype)_>}}{%~{%_(type)}handle{Base}}`
+`
+%:Description:%@{%_?(dimension)} {`
+2{%ScalarDescription()_matrix} `
+1{%ScalarDescription()_vector} `
+{%?{%_(optional)}{optional_}%ScalarDescription()}}`
+`
+%:CType:%@{%_?(dimension)} {1{Vector_<} 2{Matrix_<}}%ScalarCType()%?{%_(dimension)}{>}`
+%:CSubType:%|{%_?(subtype)}{Storable_}`
+%:CSubTypeAngleBracket:%?{%_(subtype)}{<%CSubType()>}`

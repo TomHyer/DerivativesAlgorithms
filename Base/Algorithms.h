@@ -25,7 +25,7 @@ template<class CS_, class CD_> void Copy(const CS_& src, CD_* dst)
 
 template<class C_> auto Copy(const C_& src)
 {
-	typedef vector_of<decltype(*src.begin())>::type vector_t;
+	typedef vector_of<VALUE_TYPE_OF(*src.begin())>::type vector_t;
 	vector_t retval(src.size());
 	std::copy(src.begin(), src.end(), retval.begin());
 	return retval;
@@ -93,12 +93,17 @@ template<class C1_, class C2_> C1_ Join(const C1_& c1, const C2_& c2)
 	return retval;
 }
 
+template<class C_, class P_> void Filter(C_* c, const P_& pred)
+{
+	typedef decltype(*c->begin()) element_t;
+	auto stop = std::remove_if(c->begin(), c->end(), [&](const element_t& e) {return !pred(e); });
+	c->erase(stop, c->end());
+}
 template<class C_, class P_> C_ Filter(const C_& src, const P_& pred)
 {
-   typedef decltype(*src.begin()) element_t;
+    typedef decltype(*src.begin()) element_t;
 	C_ retval(src);
-   auto stop = std::remove_if(retval.begin(), retval.end(), [&](const element_t& e){return !pred(e); });
-	retval.erase(stop, retval.end());
+	Filter(&retval);
 	return retval;
 }
 

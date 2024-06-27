@@ -1,5 +1,6 @@
 
 #include "Platform.h"
+#include "Numerics.h"
 #include "Strict.h"
 #include "Exceptions.h"
 

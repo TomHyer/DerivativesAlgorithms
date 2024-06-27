@@ -17,6 +17,8 @@ object|settings|storable|record
 	CWrite
 ->MG_%_()%?{%_(version)}{_v%_(version)}_Read.inc
 	CRead
+->MG_#_object.inc
+	C++Source
 enumeration
 ->MG_#_enum.inc
 	C++Source

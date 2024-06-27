@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Score.h"
+
 typedef struct
 {
 	mutable std::array<uint64, 2> att, patt, dbl_att, xray;
@@ -14,4 +16,4 @@ typedef struct
 	uint16 move;
 	uint8 turn, castle_flags, ply, ep_square, capture, gen_flags, piece, stage, mul;
 	sint32 moves[230];
-} GData;
+} PlyState_;

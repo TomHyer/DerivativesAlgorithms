@@ -9,7 +9,8 @@ struct GEvalInfo
 {
 	std::array<uint64, 2> area, free;
 	uint64 occ, rray, bray;
-	GPawnEntry* PawnEntry;
+	const GPawnEntry* pawnEntry_;
+	GPawnEntry pawnEval_;
 	const GMaterial* material;
 	packed_t score;
 	std::array<uint32, 2> king_att;

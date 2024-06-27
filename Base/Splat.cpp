@@ -24,7 +24,7 @@ using std::shared_ptr;
 namespace
 {
 	static const String_ OBJECT_PREFACE("~");
-   static const String_ TAG_PREFACE("$");
+	static const String_ TAG_PREFACE("$");
 	struct XSplat_ : Archive::Store_
 	{
       String_ tag_;
@@ -214,7 +214,7 @@ namespace
 		DateTime_ operator()(const Date_& dt) const { return DateTime_(dt, 0.0); }	// allow promotion
 		DateTime_ operator()(const DateTime_& dt) const { return dt; }
 		DateTime_ operator()(std::monostate) const { return DateTime_(); }	// should only occur in the interior of a table
-		template<class T_> DateTime_ operator()(T_) const { THROW("Can't create a datetime from cell"); }
+		template<class T_> DateTime_ operator()(T_) const { THROW("Can't create a timepoint from cell"); }
 	};
 	DateTime_ ExtractDateTime(const Cell_& src)
 	{
@@ -353,7 +353,7 @@ namespace
 		{
          return TranslateRange(VectorRange(), ExtractDate);
 		}
-		Vector_<DateTime_> AsDateTimeVector() const override
+		Vector_<DateTime_> AsTimepointVector() const override
 		{
          return TranslateRange(VectorRange(), ExtractDateTime);
 		}

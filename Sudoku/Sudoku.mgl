@@ -1,5 +1,1 @@
-%:ExportClass:__declspec(dllexport)`
-%:ExportFunc:__declspec(dllexport)`
-%:SeedEnv:ENV_SEED_TYPE(ObjectAccess_);
-%:DLLBaseName:Base`
-%:PassEnv:_env, `
+%:DLLShortName:Sudoku`

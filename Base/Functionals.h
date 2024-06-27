@@ -66,7 +66,7 @@ template<class C_> ArrayFunctor_<C_> LookupIn(const C_& src)	// takes a copy of 
 	return ArrayFunctor_<C_, C_>(src);
 }
 
-template<class SRC_, class DST_> struct ConstructCast_
+template<class DST_> struct ConstructCast_
 {
-	DST_ operator()(const SRC_& src) const { return DST_(src); }
+	template<class SRC_> DST_ operator()(const SRC_& src) const { return DST_(src); }
 };

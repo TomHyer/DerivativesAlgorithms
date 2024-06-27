@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -89,13 +89,14 @@
       <PreprocessorDefinitions>IS_BASE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Base.mgl</Command>
       <Message>generate code</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -108,6 +109,7 @@
       <PreprocessorDefinitions>IS_BASE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,7 +118,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Base.mgl</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>generate code</Message>
@@ -129,13 +131,14 @@
       <PreprocessorDefinitions>IS_BASE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Base.mgl</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>generate code</Message>
@@ -150,6 +153,7 @@
       <PreprocessorDefinitions>IS_BASE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,7 +162,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l Base.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Base.mgl</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>generate code</Message>
@@ -168,6 +172,7 @@
     <ClCompile Include="Archive.cpp" />
     <ClCompile Include="Audit.cpp" />
     <ClCompile Include="Bag.cpp" />
+    <ClCompile Include="Binary.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="BuySell.cpp" />
     <ClCompile Include="Cell.cpp" />
@@ -184,6 +189,7 @@
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Host.cpp" />
     <ClCompile Include="Interp.cpp" />
+    <ClCompile Include="LPSolve.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MatrixArithmetic.cpp" />
     <ClCompile Include="MatrixUtils.cpp" />
@@ -235,10 +241,12 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Host.h" />
     <ClInclude Include="Interp.h" />
+    <ClInclude Include="LPSolve.h" />
     <ClInclude Include="Maps.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixArithmetic.h" />
     <ClInclude Include="MatrixUtils.h" />
+    <ClInclude Include="Mutexes.h" />
     <ClInclude Include="NDArray.h" />
     <ClInclude Include="Numerics.h" />
     <ClInclude Include="Optionals.h" />

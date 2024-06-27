@@ -11,7 +11,7 @@ INLINE int To(uint16 move)
 {
 	return move & 0x3f;
 }
-inline void SetScore(int* move, uint16 score)
+inline void SetMoveScore(int* move, uint16 score)
 {
 	*move = (*move & 0xFFFF) | (score << 16);
 }  // notice this operates on long-form (int) moves

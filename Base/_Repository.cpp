@@ -9,6 +9,7 @@
 
 #include "Storable.h"
 #include "Exceptions.h"
+#include "Mutexes.h"
 #include "Globals.h"
 #include "Box.h"
 #include "MatrixUtils.h"
@@ -17,15 +18,19 @@
 
 namespace
 {
-	// a repository of objects
-	// POSTPONED -- make repository thread safe
-	std::map<String_, Handle_<Storable_> >& TheObjects()
+	typedef std::map<String_, Handle_<Storable_>> vals_t;
+
+	MutexProtected_<vals_t>& TheObjects()
 	{
-		RETURN_STATIC(std::map<String_, Handle_<Storable_>>);
+		RETURN_STATIC(MutexProtected_<vals_t>);
 	}
 
-	static std::mutex TheObjectsMutex;
-#define LOCK_OBJECTS std::lock_guard<std::mutex> l(TheObjectsMutex)
+	template<class FUNC_, typename ... ARGS_>
+	auto Apply(FUNC_ func, ARGS_ ... args)
+	{
+		return TheObjects().Apply([&](vals_t objects) { return func(objects, args ...); });
+	}
+
 
 	String_ TypeTag(const Storable_& s)
 	{
@@ -40,14 +45,82 @@ namespace
       return String::Uniquifier(&s);
 	}
 
-	void EraseByStart(const String_& start)
+
+	void EraseByStart(vals_t& objects, const String_& start)
 	{
-		LOCK_OBJECTS;
-		auto pLow = TheObjects().lower_bound(start);
+		auto pLow = objects.lower_bound(start);
 		auto pHigh = pLow;
-		while (pHigh != TheObjects().end() && pHigh->first.substr(0, start.size()) == start)
+		while (pHigh != objects.end() && pHigh->first.substr(0, start.size()) == start)
 			++pHigh;
-		TheObjects().erase(pLow, pHigh);
+		objects.erase(pLow, pHigh);
+	}
+
+	String_ AddBaseImp
+		(vals_t& objects, 
+		 const Handle_<Storable_>& s,
+		 const RepositoryErase_& erase)
+	{
+		const String_ untickered = BaseTag(*s);
+		switch (erase.Switch())
+		{
+		case RepositoryErase_::Value_::NAME_NONEMPTY:
+			if (s->name_.empty())
+				break;
+			[[fallthrough]];
+		case RepositoryErase_::Value_::NAME:
+			EraseByStart(objects, untickered);	// squash anything with this name
+			break;
+		case RepositoryErase_::Value_::TYPE:
+			EraseByStart(objects, TypeTag(*s));	// squash anything with this type	
+			break;
+		}
+		// call to LOCK_OBJECTS must be after EraseByStart, because that will also acquire the lock
+		const String_ retval = untickered + Uniquifier(*s);
+		objects.insert(make_pair(retval, s));
+		return retval;
+	}
+
+	int ErasePattern(vals_t& objects, const String_& pattern)
+	{
+		std::regex match(pattern);
+		auto start = objects.begin();
+		// could do this with remove_if, but the lambda is ghastly
+		int retval = 0;
+		while (start != objects.end())
+		{
+			if (std::regex_search(start->first, match))
+				++retval, objects.erase(start++);
+			else
+				++start;
+		}
+		return retval;
+	}
+
+	Vector_<Handle_<Storable_> > FindImp(vals_t& objects, const String_& pattern)
+	{
+		std::regex match(pattern);
+		auto all = objects;
+		Vector_<Handle_<Storable_>> retval;
+		for (auto [tag, obj] : all)
+		{
+			if (std::regex_search(tag, match))
+				retval.push_back(obj);
+		}
+		return retval;
+	}
+
+	Handle_<Storable_> FetchImp
+		(vals_t& objects, const String_& tag, bool quiet)
+	{
+		NOTICE(tag);
+		Handle_<Storable_> retval;
+		if (auto po = objects.find(tag); po != objects.end())
+		{
+			assert(po->second);  // no null object in repository
+			return po->second;
+		}
+		REQUIRE(quiet, "Repository object not found");
+		return Handle_<Storable_>();
 	}
 }	// leave local
 
@@ -56,83 +129,36 @@ String_ ObjectAccess_::AddBase
 	 const RepositoryErase_& erase) 
 const
 {
-	const String_ untickered = BaseTag(*s);
-	switch (erase.Switch())
-	{
-	case RepositoryErase_::Value_::NAME_NONEMPTY:
-		if (s->name_.empty())
-			break;
-		// else fall through
-	case RepositoryErase_::Value_::NAME:
-		EraseByStart(untickered);	// squash anything with this name
-		break;
-	case RepositoryErase_::Value_::TYPE:
-		EraseByStart(TypeTag(*s));	// squash anything with this type	
-		break;
-	}
-	// call to LOCK_OBJECTS must be after EraseByStart, because that will also acquire the lock
-	LOCK_OBJECTS;
-	const String_ retval = untickered + Uniquifier(*s);
-	TheObjects().insert(make_pair(retval, s));
-	return retval;
+	return Apply(AddBaseImp, s, erase);
 }
 
 int ObjectAccess_::Erase(const String_& pattern) const
 {
-	std::regex match(pattern);
-	LOCK_OBJECTS;
-   auto start = TheObjects().begin();
-	// could do this with remove_if, but the lambda is ghastly
-	int retval = 0;
-	while (start != TheObjects().end())
-	{
-		if (std::regex_search(start->first, match))
-			++retval, TheObjects().erase(start++);
-		else
-			++start;
-	}
-	return retval;
+	return Apply(ErasePattern, pattern);
 }
 
 bool ObjectAccess_::Erase(const Storable_& object) const
-{
-	LOCK_OBJECTS;
-	if (auto po = TheObjects().find(BaseTag(object) + Uniquifier(object)); po != TheObjects().end())
-    {
-		TheObjects().erase(po);
-		return true;
-    }
-    return false;
+{	// standard implementation leads to C++ attempting to copy-construct a Storable_, for whatever reason
+	auto erase = [&](vals_t& objects)
+	{
+		if (auto po = objects.find(BaseTag(object) + Uniquifier(object)); po != objects.end())
+		{
+			objects.erase(po);
+			return true;
+		}
+		return false;
+	};
+	return TheObjects().Apply(erase);
 }
 
 int ObjectAccess_::Size() const
 {
-	LOCK_OBJECTS;
-	return static_cast<int>(TheObjects().size());
+	return Apply([&](vals_t& vals) { return static_cast<int>(vals.size()); });
 }
 
 Vector_<Handle_<Storable_> > ObjectAccess_::Find(const String_& pattern) const
 {
-	std::regex match(pattern);
-	LOCK_OBJECTS;
-	auto all = TheObjects();
-	Vector_<Handle_<Storable_>> retval;
-	for (auto [tag, obj] : all)
-	{
-		if (std::regex_search(tag, match))
-			retval.push_back(obj);
-	}
-	return retval;
-}
-
-void Repository_Erase
-	(const Vector_<Handle_<Storable_>>& objects,
-	 int* num_erased)
-{
-	LOCK_OBJECTS;
-	*num_erased = 0;
-	for (auto obj : objects)
-		*num_erased += static_cast<int>(TheObjects().erase(BaseTag(*obj) + Uniquifier(*obj)));
+	return Apply(FindImp, pattern);
 }
 
 // enable a store for low-level global objects
@@ -140,6 +166,18 @@ void Repository_Erase
 namespace
 {
 	static const String_ GLOBAL_TAG("##GLOBAL##");
+
+	Cell_ FindInBox(vals_t& objects, const String_& tag_start)
+	{
+		if (auto po = objects.lower_bound(tag_start);
+			po != objects.end() && po->first.substr(0, tag_start.size()) == tag_start)
+		{
+			const Box_* box = dynamic_cast<const Box_*>(po->second.get());
+			REQUIRE(box && !box->contents_.Empty(), "Internal error, or global tag meddling");
+			return box->contents_(0, 0);
+		}
+		return Cell_();
+	}
 
 	struct RepoStore_ : Global::Store_
 	{
@@ -150,17 +188,8 @@ namespace
 		}
 		Cell_ Get(const String_& name) override
 		{
-			Box_ dummy(GLOBAL_TAG + name, Matrix_<Cell_>());
-			String_ tagStart = BaseTag(dummy);
-			LOCK_OBJECTS;
-			if (auto po = TheObjects().lower_bound(tagStart); 
-				po != TheObjects().end() && po->first.substr(0, tagStart.size()) == tagStart)
-			{
-				const Box_* box = dynamic_cast<const Box_*>(po->second.get());
-				REQUIRE(box && !box->contents_.Empty(), "Internal error, or global tag meddling");
-				return box->contents_(0, 0);
-			}
-			return Cell_();
+			static const Box_ dummy(GLOBAL_TAG + name, Matrix_<Cell_>());
+			return Apply(FindInBox, BaseTag(dummy));
 		}
 	};
 
@@ -171,14 +200,5 @@ Handle_<Storable_> ObjectAccess_::Fetch
    (const String_& tag, bool quiet)
 const
 {
-   NOTICE(tag);
-   LOCK_OBJECTS;
-   Handle_<Storable_> retval;
-   if (auto po = TheObjects().find(tag); po != TheObjects().end())
-   {
-      assert(po->second);  // no null object in repository
-      return po->second;
-   }
-   REQUIRE(quiet, "Repository object not found");
-   return Handle_<Storable_>();
+	return Apply(FetchImp, tag, quiet);
 }

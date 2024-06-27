@@ -34,7 +34,7 @@ public:
 		READING,
 		READING_EXCLUSIVE,   // avoid vast memory use
 		SHOWING,
-	} mode_;
+	} mode_ = PASSIVE;
 
 	void Notice
 		(const String_& key,

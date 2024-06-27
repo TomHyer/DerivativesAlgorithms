@@ -8,7 +8,7 @@ namespace Archive
 	class Store_;
 }
 
-class Storable_ : noncopyable
+class BASE_EXPORT Storable_ : noncopyable
 {
 public:
 	const String_ type_;

@@ -1,9 +1,9 @@
 #pragma once
 
-INLINE sint16 Opening(packed_t x) { return Pick16<1>(x); }
-INLINE sint16 Middle(packed_t x) { return Pick16<2>(x); }
-INLINE sint16 Endgame(packed_t x) { return Pick16<3>(x); }
-INLINE sint16 Closed(packed_t x) { return Pick16<4>(x); }
+INLINE constexpr sint16 Opening(packed_t x) { return Pick16<1>(x); }
+INLINE constexpr sint16 Middle(packed_t x) { return Pick16<2>(x); }
+INLINE constexpr sint16 Endgame(packed_t x) { return Pick16<3>(x); }
+INLINE constexpr sint16 Closed(packed_t x) { return Pick16<4>(x); }
 
 #define TEMPLATE_ME(f) (me ? f<1> : f<0>)
 

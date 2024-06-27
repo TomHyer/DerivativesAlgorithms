@@ -92,8 +92,8 @@ namespace String
 	int ToInt(const String_& src);
 	String_ FromDouble(double src);
 	BASE_EXPORT String_ FromInt(int src);
-	String_ Condensed(const String_& src);
-	bool Equivalent(const String_& lhs, const char* rhs);
+	BASE_EXPORT String_ Condensed(const String_& src);
+	BASE_EXPORT bool Equivalent(const String_& lhs, const char* rhs);
 
 	String_ NextName(const String_& name);
 	String_ Uniquifier(const void* p);

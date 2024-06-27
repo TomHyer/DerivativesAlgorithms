@@ -7,7 +7,6 @@
 #include "Strings.h"	// forward declaration only works for non-std classes
 
 class Date_;
-int operator-(const Date_& lhs, const Date_& rhs);
 
 namespace Date
 {
@@ -50,7 +49,7 @@ public:
 	inline Date_& operator--() { --serial_; return *this; }
 };
 
-int operator-(const Date_& lhs, const Date_& rhs);
+BASE_EXPORT int operator-(const Date_& lhs, const Date_& rhs);
 
 // support interpolation based on date
 inline double NumericValueOf(const Date_& src) { return Date::ToExcel(src); }

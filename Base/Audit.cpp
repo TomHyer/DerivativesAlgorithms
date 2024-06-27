@@ -32,7 +32,8 @@ const
 	switch (mode_)
 	{
 	case READING_EXCLUSIVE:
-		mine_->contents_.erase(key);   // and fall through
+		mine_->contents_.erase(key);  
+		[[fallthrough]];
 	case READING:
 		mine_->contents_.insert(make_pair(key, value));
 		break;

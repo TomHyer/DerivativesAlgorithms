@@ -99,7 +99,7 @@ namespace
 	std::string MsgWithStack(const char* msg)
 	{
 		std::string retval(msg);
-		for (auto si : TheStack())
+		for (const auto& si : TheStack())
 			retval += "; " + si.Message();
 		return retval;
 	}

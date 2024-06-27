@@ -35,29 +35,30 @@ namespace Log
 
 namespace Excel
 {
-	BASE_EXPORT int AutoOpen();
+	BASE_EXPORT int AutoOpen(const String_& dll_name);
 	inline void InitializeSessionIfNeeded() {}	// no runtime initialization required
-	BASE_EXPORT double ToDouble(const OPER_* src);
-	BASE_EXPORT std::optional<double> ToDouble(const OPER_* src, bool);	// use overloading to know the return type
-	BASE_EXPORT int ToInt(const OPER_* src);
-	BASE_EXPORT std::optional<int> ToInt(const OPER_* src, bool);
-	BASE_EXPORT bool ToBool(const OPER_* src);
-	BASE_EXPORT std::optional<bool> ToBool(const OPER_* src, bool);
+	BASE_EXPORT double ToNumber(const OPER_* src);
+	BASE_EXPORT std::optional<double> ToOptionalNumber(const OPER_* src);
+	BASE_EXPORT int ToInteger(const OPER_* src);
+	BASE_EXPORT std::optional<int> ToOptionalInteger(const OPER_* src);
+	BASE_EXPORT bool ToBoolean(const OPER_* src);
+	BASE_EXPORT std::optional<bool> ToOptionalBoolean(const OPER_* src);
 	BASE_EXPORT String_ ToString(const OPER_* src, bool optional = false);
+	inline String_ ToOptionalString(const OPER_* src) { return ToString(src, true); }
 	BASE_EXPORT Date_ ToDate(const OPER_* src, bool optional = false);
 	BASE_EXPORT DateTime_ ToDateTime(const OPER_* src, bool optional = false);
 	BASE_EXPORT Cell_ ToCell(const OPER_* src, bool optional = false);
 	BASE_EXPORT Dictionary_ ToDictionary(const OPER_* src, bool optional = false);
 	BASE_EXPORT Handle_<Storable_> ToHandleBase(_ENV, const OPER_* src, bool optional = false);
-	BASE_EXPORT Vector_<> ToDoubleVector(const OPER_* src, bool optional = false);
-	BASE_EXPORT Vector_<int> ToIntVector(const OPER_* src, bool optional = false);
+	BASE_EXPORT Vector_<> ToNumberVector(const OPER_* src, bool optional = false);
+	BASE_EXPORT Vector_<int> ToIntegerVector(const OPER_* src, bool optional = false);
 	BASE_EXPORT Vector_<bool> ToBoolVector(const OPER_* src, bool optional = false);
 	BASE_EXPORT Vector_<String_> ToStringVector(const OPER_* src, bool optional = false);
 	BASE_EXPORT Vector_<Date_> ToDateVector(const OPER_* src, bool optional = false);
 	BASE_EXPORT Vector_<Cell_> ToCellVector(const OPER_* src, bool optional = false);
-	BASE_EXPORT Vector_<Handle_<Storable_> > ToHandleBaseVector(_ENV, const OPER_* src, bool optional = false);
-	BASE_EXPORT Matrix_<double> ToDoubleMatrix(const OPER_* src, bool optional = false);
-	BASE_EXPORT Matrix_<int> ToIntMatrix(const OPER_* src, bool optional = false);
+	BASE_EXPORT Vector_<Handle_<Storable_> > ToHandleVectorBase(_ENV, const OPER_* src, bool optional = false);
+	BASE_EXPORT Matrix_<double> ToNumberMatrix(const OPER_* src, bool optional = false);
+	BASE_EXPORT Matrix_<int> ToIntegerMatrix(const OPER_* src, bool optional = false);
 	// Matrix of bool is presently not supported
 	BASE_EXPORT Matrix_<String_> ToStringMatrix(const OPER_* src, bool optional = false);
 	BASE_EXPORT Matrix_<Cell_> ToCellMatrix(const OPER_* src, bool optional = false, bool greedy = false);
@@ -84,7 +85,7 @@ namespace Excel
 	}
 	template<class T_> Vector_<Handle_<T_> > ToHandleVector(_ENV, const OPER_* src)
 	{
-		const Vector_<Handle_<Storable_> > base = ToHandleBaseVector(_env, src);
+		const Vector_<Handle_<Storable_> > base = ToHandleVectorBase(_env, src);
 		Vector_<Handle_<T_> > retval;
 		for (auto b : base)
 		{

@@ -8,6 +8,7 @@
 #include "Strict.h"
 
 #include "Exceptions.h"
+#include "Functionals.h"
 #include "Numerics.h"
 #include "_Repository.h"
 
@@ -780,7 +781,7 @@ LPXLOPER12 TempErr12(int err)
 
 //----------------------------------------------------------------------------
 
-double Excel::ToDouble(const OPER_* src)
+double Excel::ToNumber(const OPER_* src)
 {
 	switch (src->xltype)
 	{
@@ -794,17 +795,17 @@ double Excel::ToDouble(const OPER_* src)
 	}
 	// ok, it's a multi
 	REQUIRE(src->val.array.rows * src->val.array.columns == 1, "Invalid input size -- scalar expected");
-	return ToDouble(&src->val.array.lparray[0]);
+	return ToNumber(&src->val.array.lparray[0]);
 }
 
-std::optional<double> Excel::ToDouble(const OPER_* src, bool)
+std::optional<double> Excel::ToOptionalNumber(const OPER_* src)
 {
 	if (!(src->xltype & (xltypeMissing | xltypeNil)))
-		return ToDouble(src);
+		return ToNumber(src);
 	return std::optional<double>();
 }
 
-int Excel::ToInt(const OPER_* src)
+int Excel::ToInteger(const OPER_* src)
 {
 	switch (src->xltype)
 	{
@@ -813,7 +814,7 @@ int Excel::ToInt(const OPER_* src)
 		break;
 	case xltypeMulti:
 		REQUIRE(src->val.array.rows * src->val.array.columns == 1, "Invalid input size -- scalar expected");
-		return ToInt(&src->val.array.lparray[0]);
+		return ToInteger(&src->val.array.lparray[0]);
 	default:
 		THROW("Invalid input type -- integer expected");
 	}
@@ -822,15 +823,15 @@ int Excel::ToInt(const OPER_* src)
 	return retval;
 }
 
-std::optional<int> Excel::ToInt(const OPER_* src, bool)
+std::optional<int> Excel::ToOptionalInteger(const OPER_* src)
 {
 	std::optional<int> retval;
 	if (!(src->xltype & (xltypeMissing | xltypeNil)))
-		retval = ToInt(src);
+		retval = ToInteger(src);
 	return retval;
 }
 
-bool Excel::ToBool(const OPER_* src)
+bool Excel::ToBoolean(const OPER_* src)
 {
 	switch (src->xltype)
 	{
@@ -843,17 +844,17 @@ bool Excel::ToBool(const OPER_* src)
 		break;
 	case xltypeMulti:
 		REQUIRE(src->val.array.rows * src->val.array.columns == 1, "Invalid input size -- scalar expected");
-		return ToBool(&src->val.array.lparray[0]);
+		return ToBoolean(&src->val.array.lparray[0]);
 	default:
 		THROW("Invalid input type -- boolean expected");
 	}
 }
 
-std::optional<bool> Excel::ToBool(const OPER_* src, bool)
+std::optional<bool> Excel::ToOptionalBoolean(const OPER_* src)
 {
 	std::optional<bool> retval;
 	if (!(src->xltype & (xltypeMissing | xltypeNil)))
-		retval = ToBool(src);
+		retval = ToBoolean(src);
 	return retval;
 }
 
@@ -875,7 +876,7 @@ DateTime_ Excel::ToDateTime(const OPER_* src, bool optional)
 	Cell_ c = ToCell(src, optional);
 	if (Cell::IsEmpty(c))
 	{
-		REQUIRE(optional, "Missing input datetime");
+		REQUIRE(optional, "Missing input timepoint");
 		return DateTime_();
 	}
 	if (Cell::IsDouble(c))
@@ -900,11 +901,9 @@ namespace
 	String_ FromPascalString(wchar_t* src)
 	{
 		const int size = *src;
-		char buf[65536];
-		for (int ii = 0; ii < size; ++ii)
-			buf[ii] = char(src[ii + 1]);
-		buf[size] = 0;
-		return String_(buf);
+		String_ retval(size, '0');
+		transform(src, src + size, retval.begin(), ConstructCast_<char>());
+		return retval;
 	}
 }	// leave local
 
@@ -1025,17 +1024,17 @@ namespace
    }
 }  // leave local
 
-Vector_<> Excel::ToDoubleVector(const OPER_* src, bool optional)
+Vector_<> Excel::ToNumberVector(const OPER_* src, bool optional)
 {
-   return ReadVector(src, optional, [](const OPER_* src){return ToDouble(src); });
+   return ReadVector(src, optional, [](const OPER_* src){return ToNumber(src); });
 }
-Vector_<int> Excel::ToIntVector(const OPER_* src, bool optional)
+Vector_<int> Excel::ToIntegerVector(const OPER_* src, bool optional)
 {
-   return ReadVector(src, optional, [](const OPER_* src){return ToInt(src); });
+   return ReadVector(src, optional, [](const OPER_* src){return ToInteger(src); });
 }
 Vector_<bool> Excel::ToBoolVector(const OPER_* src, bool optional)
 {
-   return ReadVector(src, optional, [](const OPER_* src){return ToBool(src); });
+   return ReadVector(src, optional, [](const OPER_* src){return ToBoolean(src); });
 }
 Vector_<Date_> Excel::ToDateVector(const OPER_* src, bool optional)
 {
@@ -1049,7 +1048,7 @@ Vector_<Cell_> Excel::ToCellVector(const OPER_* src, bool optional)
 {
    return ReadVector(src, optional, [](const OPER_* src){return ToCell(src); });
 }
-Vector_<Handle_<Storable_> > Excel::ToHandleBaseVector(_ENV, const OPER_* src, bool optional)
+Vector_<Handle_<Storable_> > Excel::ToHandleVectorBase(_ENV, const OPER_* src, bool optional)
 {
    return ReadVector(src, optional, [&](const OPER_* src){return ToHandleBase(_env, src, false); });
 }
@@ -1162,14 +1161,14 @@ namespace
 	}
 }	// leave local
 
-Matrix_<> Excel::ToDoubleMatrix(const OPER_* src, bool optional)
+Matrix_<> Excel::ToNumberMatrix(const OPER_* src, bool optional)
 {
-	return ToMatrix<double>(src, optional, false, Excel::ToDouble);
+	return ToMatrix<double>(src, optional, false, Excel::ToNumber);
 }
 
-Matrix_<int> Excel::ToIntMatrix(const OPER_* src, bool optional)
+Matrix_<int> Excel::ToIntegerMatrix(const OPER_* src, bool optional)
 {
-	return ToMatrix<int>(src, optional, false, Excel::ToInt);
+	return ToMatrix<int>(src, optional, false, Excel::ToInteger);
 }
 
 Matrix_<String_> Excel::ToStringMatrix(const OPER_* src, bool optional)
@@ -1207,23 +1206,23 @@ template<typename T_, typename D_> D_ ReaderExtractOrDefault(const OPER_* src, i
 
 double Excel::RowReader_::ExtractDouble(int i_col) const
 {
-   return ReaderExtract(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToDouble(src); });
+   return ReaderExtract(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToNumber(src); });
 }
 double Excel::RowReader_::ExtractDouble(int i_col, double def_val) const
 {
-   return ReaderExtractOrDefault(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToDouble(src); }, def_val);
+   return ReaderExtractOrDefault(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToNumber(src); }, def_val);
 }
 int Excel::RowReader_::ExtractInt(int i_col) const
 {
-   return ReaderExtract(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToInt(src); });
+   return ReaderExtract(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToInteger(src); });
 }
 int Excel::RowReader_::ExtractInt(int i_col, int def_val) const
 {
-   return ReaderExtractOrDefault(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToInt(src); }, def_val);
+   return ReaderExtractOrDefault(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToInteger(src); }, def_val);
 }
 bool Excel::RowReader_::ExtractBool(int i_col) const
 {
-	return ReaderExtract(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToBool(src); });
+	return ReaderExtract(src_, iRow_, i_col, [](const OPER_* src){return Excel::ToBoolean(src); });
 }
 String_ Excel::RowReader_::ExtractString(int i_col) const
 {
@@ -1501,10 +1500,10 @@ static Vector_<XLMenuItem_> TheMenuItems()
 // Initialization routine
 extern "C" __declspec(dllexport) int xlAutoOpen(void)
 {
-	return Excel::AutoOpen();
+	return Excel::AutoOpen("Base");
 }
 
-BASE_EXPORT int Excel::AutoOpen()
+BASE_EXPORT int Excel::AutoOpen(const String_& dll_name)
 {
 	// Get XLL file name
 	static OPER_ xDll;
@@ -1517,6 +1516,9 @@ BASE_EXPORT int Excel::AutoOpen()
 	for (int ii = 0; ii < TheFunctions().size(); ++ii)
 	{
 		const XLFunc_& func = TheFunctions()[ii];
+		if (func.dllName_ != dll_name)
+			continue;
+
 		OPER_ result;
 
 		Vector_<OPER_*> xl4args(10);	// we do not own this memory

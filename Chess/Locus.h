@@ -66,12 +66,13 @@ namespace Locus
 
 	struct MinorDist_
 	{
+		bool me_;
 		const std::array<uint64, 64> att_;
-		double attWt_, attAttWt_, centerWt_;
-		MinorDist_(const std::array<uint64, 64>& att, double att_wt, double att_att_wt, double center_wt = 0.0) : att_(att), attWt_(att_wt), attAttWt_(att_att_wt), centerWt_(center_wt) {}
+		double attWt_, attAttWt_, centerWt_, rankWt_;
+		MinorDist_(bool me, const std::array<uint64, 64>& att, double att_wt, double att_att_wt, double center_wt, double rank_wt) : me_(me), att_(att), attWt_(att_wt), attAttWt_(att_att_wt), centerWt_(center_wt), rankWt_(rank_wt) {}
 		inline double operator()(int x, int y) const
 		{
-			double retval = KDist(x, y) + centerWt_ * CenterDist(y);
+			double retval = KDist(x, y) + centerWt_ * CenterDist(y) + rankWt_ * (me_ ? x : 7 - x);
 			if (att_[y] & Bit(x))
 				retval -= attWt_;
 			else if (att_[y] & KAtt[x])

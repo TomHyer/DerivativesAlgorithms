@@ -35,9 +35,9 @@ class Dictionary_;
 
 namespace DA
 {
-	static const double EPSILON = 2e-14;
-	static const double INFINITY = 1e29;
-	static const double PI = 3.1415926535897932;
+	constexpr double EPSILON = 2e-14;
+	constexpr double INFINITY = 1e29;
+	constexpr double PI = 3.1415926535897932;
 }
 inline bool IsZero(double x) { return x < DA::EPSILON && -x < DA::EPSILON; }
 inline bool IsPositive(double x) { return x >= DA::EPSILON; }

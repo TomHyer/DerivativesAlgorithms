@@ -8,7 +8,7 @@
 
 extern "C" __declspec(dllexport) int xlAutoOpen(void)
 {
-    return Excel::AutoOpen();
+    return Excel::AutoOpen("Chess");
 }
 
 

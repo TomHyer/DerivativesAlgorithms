@@ -79,7 +79,7 @@ DateTime_ Cell::ToDateTime(const Cell_& src)
 {
 	if (auto p = std::get_if<DateTime_>(&src.val_))
 		return *p;
-	THROW("Cell must contain a datetime value");
+	THROW("Cell must contain a timepoint value");
 }
 
 Vector_<bool> Cell::ToBoolVector(const Cell_& src)

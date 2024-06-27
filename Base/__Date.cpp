@@ -8,7 +8,7 @@ namespace
 {
 /*IF--------------------------------------------------------------------------
 public DateTime_Text
-	Converts a datetime to a string representation (mostly for testing)
+	Converts a timepoint to a string representation (mostly for testing)
 &inputs
 t is time
 	To be represented as string

@@ -18,15 +18,15 @@ namespace Archive
 {
 	extern String_ VECTOR;
 
-   namespace Utils
-   {
-      // specialization for storables, checks whether they are already stored
-      // declared away from other utilities because it needs friend status
-	   BASE_EXPORT void SetStorable
-         (Archive::Store_& dst,
-          const String_& name,
-          const Storable_& value);
-   }
+	namespace Utils
+	{
+		// specialization for storables, checks whether they are already stored
+		// declared away from other utilities because it needs friend status
+		BASE_EXPORT void SetStorable
+			(Archive::Store_& dst,
+			const String_& name,
+			const Storable_& value);
+	}
 
 	class BASE_EXPORT Store_ : noncopyable
 	{
@@ -38,6 +38,7 @@ namespace Archive
 		virtual Store_& Child(const String_& name) = 0;
 		Store_& Element(int index);	// just converts to String_ name and gets a child
 		virtual void Done() {}
+		virtual void AddNullChild(const String_& name) {}	// to avoid storing names, binary archive needs this
 
 		virtual void operator=(double val) = 0;
 		virtual void operator=(const Date_& val) = 0;
@@ -53,70 +54,70 @@ namespace Archive
 		virtual void operator=(const Dictionary_& val) = 0;
 	};
 
-   // record of what already exists
-   class BASE_EXPORT Built_
-   {
-   public:
-      std::map<String_, Handle_<Storable_>> known_;
-   };
+	// record of what already exists
+	class BASE_EXPORT Built_
+	{
+	public:
+		std::map<String_, Handle_<Storable_>> known_;
+	};
 
-   class View_;
-   BASE_EXPORT Handle_<Storable_> Extract
-      (const Archive::View_& src,
-       Built_& built);
+	class View_;
+	BASE_EXPORT Handle_<Storable_> Extract
+		(const Archive::View_& src,
+		Built_& built);
 
 	class BASE_EXPORT View_ : noncopyable
 	{
-      virtual Handle_<Storable_>& Known(Archive::Built_& built) const = 0; // returns a reference within 'built'
-      friend Handle_<Storable_> Archive::Extract(const Archive::View_& src, Built_& built);
-   public:
+		virtual Handle_<Storable_>& Known(Archive::Built_& built) const = 0; // returns a reference within 'built'
+		friend Handle_<Storable_> Archive::Extract(const Archive::View_& src, Built_& built);
+	public:
 		virtual ~View_();
 
-      // query fundamental types
-      virtual double AsDouble() const = 0;
-      virtual int AsInt() const = 0;
-	  virtual bool AsBool() const = 0;
-      virtual Date_ AsDate() const = 0;
-      virtual String_ AsString() const = 0;
-      virtual Dictionary_ AsDictionary() const = 0;
-      virtual Vector_<> AsDoubleVector() const = 0;
-      virtual Vector_<int> AsIntVector() const = 0;
-      virtual Vector_<bool> AsBoolVector() const = 0;
-      virtual Vector_<String_> AsStringVector() const = 0;
-      virtual Vector_<Date_> AsDateVector() const = 0;
-      virtual Vector_<DateTime_> AsDateTimeVector() const = 0;
-      virtual Matrix_<> AsDoubleMatrix() const = 0;
-      virtual Matrix_<Cell_> AsCellMatrix() const = 0;
+		// query fundamental types
+		virtual double AsDouble() const = 0;
+		virtual int AsInt() const = 0;
+		virtual bool AsBool() const = 0;
+		virtual Date_ AsDate() const = 0;
+		virtual String_ AsString() const = 0;
+		virtual Dictionary_ AsDictionary() const = 0;
+		virtual Vector_<> AsDoubleVector() const = 0;
+		virtual Vector_<int> AsIntVector() const = 0;
+		virtual Vector_<bool> AsBoolVector() const = 0;
+		virtual Vector_<String_> AsStringVector() const = 0;
+		virtual Vector_<Date_> AsDateVector() const = 0;
+		virtual Vector_<DateTime_> AsTimepointVector() const = 0;
+		virtual Matrix_<> AsDoubleMatrix() const = 0;
+		virtual Matrix_<Cell_> AsCellMatrix() const = 0;
 
-      // query composite types
+		// query composite types
 		virtual String_ Type() const = 0;	// empty for atoms
 		virtual const View_& Child(const String_& name) const = 0;
 		virtual bool HasChild(const String_& name) const = 0;
 		const View_& Element(int index) const;
 		bool HasElement(int index) const;
-      // notify of unexpected children
-      virtual void Unexpected(const String_& child_name) const = 0;
+		// notify of unexpected children
+		virtual void Unexpected(const String_& child_name) const = 0;
 	};
 
 	template<class T_ = Storable_> struct Builder_
 	{
 		Built_& share_;
-      const char* name_;
-      const char* type_;
+		const char* name_;
+		const char* type_;
 		Builder_(Built_& share, const char* name, const char* type) : share_(share), name_(name), type_(type) {}
 		Handle_<T_> operator()(const View_& src) const
 		{
-         NOTICE2("Child name", name_);
-         Handle_<Storable_> object = Extract(src, share_);
+			NOTICE2("Child name", name_);
+			Handle_<Storable_> object = Extract(src, share_);
 			// add type
-         NOTICE2("Expected type", type_);
+			NOTICE2("Expected type", type_);
 			Handle_<T_> retval = handle_cast<T_>(object);
 			REQUIRE(retval, "Object has wrong type");
 			return retval;
 		}
 	};
 
-	class Reader_ : noncopyable
+	class BASE_EXPORT Reader_ : noncopyable
 	{
 	public:
 		virtual ~Reader_();
@@ -124,7 +125,7 @@ namespace Archive
 		virtual Storable_* Build(const Archive::View_& View_, Archive::Built_& share) const = 0;	// builds from archive, NOT from own data
 	};
 
-	void Register(const String_& type, const Reader_* extractor);	// we keep the pointer
+	BASE_EXPORT void Register(const String_& type, const Reader_* extractor);	// we keep the pointer
 
 	// free helper functions
 	namespace Utils
@@ -152,7 +153,9 @@ namespace Archive
 			 const String_& name,
 			 const T_& value)
 		{
-			if (value != T_())
+			if (value == T_())
+				dst.AddNullChild(name);
+			else
 				Set(dst, name, value);
 		}
 		// partial specialization for std::optional
@@ -163,12 +166,16 @@ namespace Archive
 		{
 			if (value)
 				Set(dst, name, value.value());
+			else
+				dst.AddNullChild(name);
 		}
 		template<class T_> void SetMultiple
 			(Archive::Store_& dst,
 			 const String_& name,
 			 const Vector_<T_>& values)
 		{
+			if (values.empty())
+				dst.AddNullChild(name);
 			for (int ii = 0; ii < values.size(); ++ii)
 				Set(dst, name + String::FromInt(ii), values[ii]);
 		}

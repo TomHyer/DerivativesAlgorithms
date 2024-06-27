@@ -141,14 +141,14 @@
     <ClCompile Include="Globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Binary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LPSolve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Splat.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Storable.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="__Platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -288,6 +288,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ranges.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Splat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Storable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mutexes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LPSolve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

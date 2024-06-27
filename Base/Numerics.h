@@ -4,7 +4,7 @@
 #include <numeric>
 #include "Export.h"
 
-int AsInt(double src);
+BASE_EXPORT int AsInt(double src);
 int AsInt(std::ptrdiff_t src);
 int NearestInt(double src);
 

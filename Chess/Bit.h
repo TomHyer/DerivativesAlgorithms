@@ -22,6 +22,7 @@ constexpr void Cut_c(uint64& x)
 
 INLINE int lsb(uint64 x)
 {
+	assert(x);	// see LSBZ
 	unsigned long y;
 	_BitScanForward64(&y, x);
 	return y;
@@ -29,6 +30,7 @@ INLINE int lsb(uint64 x)
 
 INLINE int msb(uint64 x)
 {
+	assert(x);  // see MSBZ
 	unsigned long y;
 	_BitScanReverse64(&y, x);
 	return y;

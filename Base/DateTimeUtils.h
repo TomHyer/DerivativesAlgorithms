@@ -12,5 +12,5 @@ class DateTime_;
 namespace DateTime
 {
 	BASE_EXPORT DateTime_ FromString(const String_& src);	// date, space, colon-separated numbers
+	BASE_EXPORT DateTime_ FromExcel(double src);
 }
-

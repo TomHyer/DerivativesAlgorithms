@@ -10,25 +10,20 @@
 
 struct CommonData_
 {
-	Magic::BMagic_ bMagic_;
-	Magic::RMagic_ rMagic_;
+	Magic::Magic_<B_MAGIC_SIZE> BMagic_;
+	Magic::Magic_<R_MAGIC_SIZE> RMagic_;
 	std::array<GMaterial, TotalMat> Material;
 	std::array<std::array<std::array<uint64, 64>, 64>, 2> Kpk;
-	std::array<packed_t, 16 * 64> PstVals;
 	std::array<std::array<uint64, 64>, 16> PieceKey;
-	std::array<uint64, 64> LocusN, LocusB, LocusR, LocusQ, LocusK;
+	std::array<std::array<uint64, 64>, 2> LocusN, LocusB, LocusR, LocusQ, LocusK;
 	std::array<std::array<packed_t, 28>, 2> MobQueen;
 	std::array<std::array<packed_t, 15>, 2> MobBishop, MobRook;
 	std::array<std::array<packed_t, 9>, 2> MobKnight;
 	std::array<uint64, 16> CastleKey;
 	std::array<uint64, 8> EPKey;
-	std::array<uint64, 8> PIsolated;
-	std::array<packed_t, 8> PasserCandidate;
-	//std::array<packed_t, 8> PasserGeneral, PasserBlocked, PasserFree, PasserSupported, PasserProtected, PasserConnected, PasserOutside, PasserClear;
 	std::array<std::array<sint16, 8>, 3> Shelter;
 	std::array<uint8, 16> LogDist;
 	std::array<sint16, 8> PasserAtt, PasserDef, PasserAttLog, PasserDefLog;
-	std::array<sint16, 4> StormBlocked, StormShelterAtt, StormConnected, StormOpen, StormFree;
 	uint64 TurnKey;
 };
 
@@ -84,16 +79,30 @@ inline void WorkerList_::Remove(int iw)
 }
 #endif
 
+struct SharedInfo_;
 struct Progress_
 {
 	uint8 count_;	// packed W,B
 	constexpr Progress_() : count_(0) {}
 	constexpr Progress_(uint8 nw, uint8 nb) : count_((nw - 1) << 4 | (nb - 1)) {}
-	bool Reachable() const;	// implementation after SHARED is declared
+	bool Reachable(SharedInfo_* shared) const;	// implementation after SharedInfo_ is declared
 };
+
+struct SharedSearchState_
+{
+	bool stopAll_;
+	uint16_t date_;
+	bool ponder_;
+	int depth_;
+	bool firstMove_;
+	score_t pvsScore_;
+};
+SharedSearchState_ TheShare;
 
 struct SharedInfo_
 {
+	SharedSearchState_ search_;
+
 	WorkerList_ working;
 	Progress_ rootProgress;
 	mutex_t mutex = NULL;
@@ -104,18 +113,23 @@ struct SharedInfo_
 	time_point startTime;
 	uint64_t softTimeLimit;
 	uint64_t hardTimeLimit;
-	Board_ rootBoard;
-	GData rootData;
+	Gull::Board_ rootBoard;
+	PlyState_ rootData;
 	struct {
 		int depth, value, move, worker;
 		bool failLow;
 	} best;
 	uint64_t rootStack[1024];
 	unsigned rootSp;
-	bool stopAll;
-	uint16_t date;
-	volatile bool ponder;
 };
 
-SharedInfo_* SHARED = 0;
+inline bool Progress_::Reachable(SharedInfo_* shared) const
+{
+	assert(shared);
+	if ((count_ >> 4) > (shared->rootProgress.count_ >> 4))
+		return false;
+	if ((count_ & 0xF) > (shared->rootProgress.count_ & 0xF))
+		return false;
+	return true;
+}
 
