@@ -22,4 +22,3 @@ struct BASE_EXPORT Box_ : Storable_
 	Box_(const String_& name, const Matrix_<Cell_>& data) : Storable_("Box", name), contents_(data) {}
 	void Write(Archive::Store_& dst) const override;
 };
-

@@ -5,7 +5,7 @@
 
 inline bool TruthValueOf(...)
 {
-	static_assert(false, "No implementation of TruthValueOf exists");
+#error("No implementation of TruthValueOf exists");
 }
 
 template<class T_> struct Boolean_

@@ -15,7 +15,7 @@ class BASE_EXPORT Auditor_ : public Environment_::Entry_
 public:
 	virtual void Notice
 		(const String_& key,
-		const Handle_<Storable_>& value)
+		 const Handle_<Storable_>& value)
 	const = 0;
 
 	virtual Vector_<Handle_<Storable_ > > Find
@@ -38,7 +38,7 @@ public:
 
 	void Notice
 		(const String_& key,
-		const Handle_<Storable_>& value)
+		 const Handle_<Storable_>& value)
 	const override;
 
 	Vector_<Handle_<Storable_ > > Find
@@ -70,7 +70,7 @@ namespace Environment
 				for (auto h : fh)
 				{
 					Handle_<T_> temp = handle_cast<T_>(h);
-					if (!temp.Empty() && temp != *value_)
+					if (temp && temp.get() != value_->get())
 					{
 						REQUIRE(value_->Empty(), "Conflicting recollections");
 						*value_ = temp;

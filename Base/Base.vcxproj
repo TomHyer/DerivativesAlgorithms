@@ -208,6 +208,7 @@
     <ClCompile Include="__Bag.cpp" />
     <ClCompile Include="__Box.cpp" />
     <ClCompile Include="__Date.cpp" />
+    <ClCompile Include="__Enigma.cpp" />
     <ClCompile Include="__Interp.cpp" />
     <ClCompile Include="__Repository.cpp" />
     <ClCompile Include="__Splat.cpp" />

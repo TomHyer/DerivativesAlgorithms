@@ -126,4 +126,3 @@ namespace JNI
 	// errors
 	jobject Error(JNIEnv* jenv, const char* msg, const char* arg_name);
 }
-

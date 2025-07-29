@@ -1,4 +1,5 @@
 #define _Regex_traits _Regex_traits_Excel
+#pragma optimize("", off)
 
 #include "Platform.h"
 #include "_Excel.h"
@@ -902,7 +903,7 @@ namespace
 	{
 		const int size = *src;
 		String_ retval(size, '0');
-		transform(src, src + size, retval.begin(), ConstructCast_<char>());
+		transform(src + 1, src + size + 1, retval.begin(), ConstructCast_<char>());
 		return retval;
 	}
 }	// leave local
@@ -1388,8 +1389,6 @@ OPER_ Empty()
 
 OPER_* Excel::Retval_::ToXloper() const
 {
-	OPER_* lpx = (OPER_*)GetMemoryForExcel(sizeof(OPER_));
-	lpx->xltype = xltypeMulti | xlbitDLLFree;
 	int nRows = scalars_.size();
 	for (auto v : vectors_)
 		nRows = Max<int>(nRows, values_[v].Rows());
@@ -1399,6 +1398,10 @@ OPER_* Excel::Retval_::ToXloper() const
 		nRows = Max<int>(nRows, values_[m].Rows());
 		nCols += values_[m].Cols();
 	}
+	if (nRows * nCols == 0)
+		return nullptr;
+	OPER_* lpx = (OPER_*)GetMemoryForExcel(sizeof(OPER_));
+	lpx->xltype = xltypeMulti | xlbitDLLFree;
 	lpx->val.array.rows = nRows;
 	lpx->val.array.columns = nCols;
 	lpx->val.array.lparray = (OPER_*)GetMemoryForExcel(nRows * nCols * sizeof(OPER_));

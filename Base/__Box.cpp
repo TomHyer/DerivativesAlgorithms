@@ -3,6 +3,8 @@
 #include "Box.h"
 #include "Strict.h"
 
+#include "Optionals.h"
+
 namespace
 {
 /*IF--------------------------------------------------------------------------
@@ -48,4 +50,3 @@ contents is cell[][]
 
 #include "MG_Box_New_public.inc"
 #include "MG_Box_Unbox_public.inc"
-

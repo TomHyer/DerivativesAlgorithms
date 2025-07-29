@@ -2,6 +2,7 @@
 #include "__Platform.h"
 #include "Bag.h"
 #include "Strict.h"
+#include "Algorithms.h"
 
 namespace
 {

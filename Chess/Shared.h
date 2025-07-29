@@ -10,10 +10,10 @@
 
 struct CommonData_
 {
-	Magic::Magic_<B_MAGIC_SIZE> BMagic_;
-	Magic::Magic_<R_MAGIC_SIZE> RMagic_;
-	std::array<GMaterial, TotalMat> Material;
+	Magic::Magic_ BMagic_, RMagic_;
+	std::vector<GMaterial> material_;
 	std::array<std::array<std::array<uint64, 64>, 64>, 2> Kpk;
+	std::array<std::array<std::array<uint16, 64>, 64>, 6> Cuckoo;
 	std::array<std::array<uint64, 64>, 16> PieceKey;
 	std::array<std::array<uint64, 64>, 2> LocusN, LocusB, LocusR, LocusQ, LocusK;
 	std::array<std::array<packed_t, 28>, 2> MobQueen;
@@ -96,6 +96,7 @@ struct SharedSearchState_
 	int depth_;
 	bool firstMove_;
 	score_t pvsScore_;
+	double emaDepth_;	
 };
 SharedSearchState_ TheShare;
 

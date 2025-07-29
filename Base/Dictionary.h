@@ -19,6 +19,11 @@ public:
 	int Size() const { return static_cast<int>(val_.size()); }
 	std::map<String_, Cell_>::const_iterator begin() const { return val_.begin(); }
 	std::map<String_, Cell_>::const_iterator end() const { return val_.end(); }
+
+	template<class T_> void InsertEnum(const String_& key, const T_& val)
+	{
+		this->Insert(key, Cell_(val.String()));
+	}
 };
 
 namespace Dictionary

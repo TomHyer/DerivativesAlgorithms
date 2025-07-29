@@ -26,7 +26,7 @@ namespace
 	}
 
 	template<class FUNC_, typename ... ARGS_>
-	auto Apply(FUNC_ func, ARGS_ ... args)
+	auto ApplyToObjects(FUNC_ func, ARGS_ ... args)
 	{
 		return TheObjects().Apply([&](vals_t objects) { return func(objects, args ...); });
 	}
@@ -129,12 +129,12 @@ String_ ObjectAccess_::AddBase
 	 const RepositoryErase_& erase) 
 const
 {
-	return Apply(AddBaseImp, s, erase);
+	return ApplyToObjects(AddBaseImp, s, erase);
 }
 
 int ObjectAccess_::Erase(const String_& pattern) const
 {
-	return Apply(ErasePattern, pattern);
+	return ApplyToObjects(ErasePattern, pattern);
 }
 
 bool ObjectAccess_::Erase(const Storable_& object) const
@@ -153,12 +153,12 @@ bool ObjectAccess_::Erase(const Storable_& object) const
 
 int ObjectAccess_::Size() const
 {
-	return Apply([&](vals_t& vals) { return static_cast<int>(vals.size()); });
+	return ApplyToObjects([&](vals_t& vals) { return static_cast<int>(vals.size()); });
 }
 
 Vector_<Handle_<Storable_> > ObjectAccess_::Find(const String_& pattern) const
 {
-	return Apply(FindImp, pattern);
+	return ApplyToObjects(FindImp, pattern);
 }
 
 // enable a store for low-level global objects
@@ -189,7 +189,7 @@ namespace
 		Cell_ Get(const String_& name) override
 		{
 			static const Box_ dummy(GLOBAL_TAG + name, Matrix_<Cell_>());
-			return Apply(FindInBox, BaseTag(dummy));
+			return ApplyToObjects(FindInBox, BaseTag(dummy));
 		}
 	};
 
@@ -200,5 +200,5 @@ Handle_<Storable_> ObjectAccess_::Fetch
    (const String_& tag, bool quiet)
 const
 {
-	return Apply(FetchImp, tag, quiet);
+	return ApplyToObjects(FetchImp, tag, quiet);
 }

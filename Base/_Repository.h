@@ -40,8 +40,8 @@ public:
 
 	// count handles
 	int Size() const;
-   // find a handle based on an input string which may be incomplete
-   Handle_<Storable_> LowerBound(const String_& partial_name) const;
+    // find a handle based on an input string which may be incomplete
+    Handle_<Storable_> LowerBound(const String_& partial_name) const;
 	// return all matching handles 
 	Vector_<Handle_<Storable_> > Find(const String_& pattern) const;
 	// erase all matching handles, return number erased

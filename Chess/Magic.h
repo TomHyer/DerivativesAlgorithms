@@ -46,9 +46,9 @@ namespace Magic
 		51200, 53248, 54272, 55296, 56320, 57344, 58368, 59392, 61440, 63488, 64512, 65536, 66560, 67584, 68608, 69632, 71680, 73728, 
 		74752, 75776, 76800, 77824, 78848, 79872, 81920, 86016, 88064, 90112, 92160, 94208, 96256, 98304 };
 
-	template<int SIZE> struct Magic_
+	struct Magic_
 	{
-		std::array<uint64, SIZE> Attacks;
-		std::array<uint64, 64> Mask;
+		std::vector<uint64> attacks_;
+		std::array<uint64, 64> masks_;
 	};
 }

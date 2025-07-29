@@ -81,6 +81,4 @@ namespace Cell
 
 	BASE_EXPORT Vector_<bool> ToBoolVector(const Cell_& src);	// accepts single boolean, or String_
 	BASE_EXPORT Cell_ FromBoolVector(const Vector_<bool>& src);
-
 }
-

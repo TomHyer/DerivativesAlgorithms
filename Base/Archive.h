@@ -199,11 +199,11 @@ namespace Archive
 		}
 		template<class E_, class T_> void GetMultiple
 			(const Archive::View_& src,
-			const String_& name,
-			Vector_<E_>* values,
-			const T_& translator)	// element translator
+			 const String_& name,
+			 Vector_<E_>* values,
+			 const T_& translator)	// element translator
 		{
-			for (;;)
+			for ( ; ; )
 			{
 				String_ childName = name + String::FromInt(values->size());
 				if (!src.HasChild(childName))
@@ -213,4 +213,3 @@ namespace Archive
 		}
 	}
 }
-

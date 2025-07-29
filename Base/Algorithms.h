@@ -12,20 +12,15 @@ template<class T_> T_ Previous(const T_& src) { T_ retval(src);  return --retval
 #define ASSIGN(p, v) if (!p); else *p = v
 #define DEREFERENCE(p, v) (p ? *p : v)
 
-template<class T> struct vector_of
-{
-	typedef typename ::Vector_<typename std::remove_reference<typename std::remove_const<T>::type>::type> type;
-};
-
 template<class CS_, class CD_> void Copy(const CS_& src, CD_* dst)
 {
 	assert(dst && src.size() == dst->size());
 	std::copy(src.begin(), src.end(), dst->begin());
 }
 
-template<class C_> auto Copy(const C_& src)
+template<template<class> class V_ = Vector_, class C_> auto Copy(const C_& src)
 {
-	typedef vector_of<VALUE_TYPE_OF(*src.begin())>::type vector_t;
+	typedef V_<VALUE_TYPE_OF(*src.begin())> vector_t;
 	vector_t retval(src.size());
 	std::copy(src.begin(), src.end(), retval.begin());
 	return retval;
@@ -60,18 +55,16 @@ template<class C_, class E_> void Fill(C_* range, const E_& val)
 	std::fill(range->begin(), range->end(), val);
 }
 
-template <typename C, typename OP> auto Apply(OP op, const C& src)->typename vector_of<decltype(op(*src.begin()))>::type
+template<template<class> class V_ = Vector_, typename C_, typename OP_> auto Apply(OP_ op, const C_& src)
 {
-	typedef typename vector_of<decltype(op(*src.begin()))>::type vector_t;
-	vector_t retval(src.size());
+	V_<decltype(op(*src.begin()))> retval(src.size());
 	Transform(src, op, &retval);
 	return retval;
 }
 
-template<class C1_, class C2_, class OP_> auto Apply(OP_ op, const C1_& src1, const C2_& src2)->typename vector_of<decltype(op(*src1.begin(), *src2.begin()))>::type
+template<template<class> class V_ = Vector_, class C1_, class C2_, class OP_> auto Apply(OP_ op, const C1_& src1, const C2_& src2)
 {
-	typedef typename vector_of<decltype(op(*src1.begin(), *src2.begin()))>::type vector_t;
-	vector_t retval(src1.size());
+	V_<decltype(op(*src1.begin(), *src2.begin()))> retval(src1.size());
 	Transform(src1, src2, op, &retval);
 	return retval;
 }
@@ -101,7 +94,6 @@ template<class C_, class P_> void Filter(C_* c, const P_& pred)
 }
 template<class C_, class P_> C_ Filter(const C_& src, const P_& pred)
 {
-    typedef decltype(*src.begin()) element_t;
 	C_ retval(src);
 	Filter(&retval);
 	return retval;
@@ -155,7 +147,7 @@ template<class C_> bool IsMonotonic(const C_& c)
 }
 
 // zipping
-template<class C1_, class C2_> auto Zip(const C1_& v1, const C2_& v2) -> Vector_<decltype(make_pair(v1.front(), v2.front()))>
+template<class C1_, class C2_> auto Zip(const C1_& v1, const C2_& v2)
 {
    auto join = [](const auto& e1, const auto& e2) {return make_pair(e1, e2); };
    return Apply(join, v1, v2);
@@ -165,25 +157,25 @@ template<class C1_, class C2_> auto Zip(const C1_& v1, const C2_& v2) -> Vector_
 template<class P_> typename P_::first_type GetFirst(const P_& pair) { return pair.first; }
 template<class P_> typename P_::second_type GetSecond(const P_& pair) { return pair.second; }
 
-template<class C_> typename vector_of<typename C_::key_type>::type Keys(const C_& src)
+template<template<class> class V_ = Vector_, class C_> auto Keys(const C_& src)
 {
-	auto op = [](const decltype(*src.begin())& kv) { return kv.first; };
-	return Apply(op, src);
+	auto op = [](const auto& kv) { return kv.first; };
+	return Apply<V_>(op, src);
 }
 
-template<class C_> typename ::Vector_<typename C_::mapped_type> MapValues(const C_& src)
+template<template<class> class V_ = Vector_, class C_> auto MapValues(const C_& src)
 {
 	auto op = [](auto kv) { return kv.second; };
-	Vector_<typename C_::mapped_type> retval(src.size());
+	V_<typename C_::mapped_type> retval(src.size());
 	Transform(src, op, &retval);
 	return retval;
 }
 
-template<class C_> typename C_::const_iterator MaxElement(const C_& src)
+template<class C_> auto MaxElement(const C_& src)
 {
 	return std::max_element(src.begin(), src.end());
 }
-template<class C_> typename C_::const_iterator MinElement(const C_& src)
+template<class C_> auto MinElement(const C_& src)
 {
 	return std::min_element(src.begin(), src.end());
 }
@@ -199,7 +191,7 @@ template<class C_, class P_> void Sort(C_* vals, const P_& pred)
 
 template<class C_, class P_> bool CheckAll(const C_& vals, const P_& pred)
 {
-   for (auto e : vals)
+   for (auto& e : vals)
       if (!pred(e))
          return false;
    return true;
@@ -207,7 +199,7 @@ template<class C_, class P_> bool CheckAll(const C_& vals, const P_& pred)
 
 template <class C_, class P_> bool CheckAny(const C_& vals, const P_& pred)
 {
-    for (auto e : vals)
+    for (auto& e : vals)
         if (pred(e))
             return true;
     return false;

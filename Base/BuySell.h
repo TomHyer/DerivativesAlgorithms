@@ -14,7 +14,6 @@ alternative BUY +
 alternative SELL -
 	Negative of Buy
 method int Sign() const;
+method BuySell_ operator-() const;
 -IF-------------------------------------------------------------------------*/
 #include "MG_BuySell_enum.h"
-
-

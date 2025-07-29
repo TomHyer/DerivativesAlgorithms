@@ -82,14 +82,14 @@ inline bool operator==(const char* lhs, const String_& rhs)
 
 namespace String
 {
-	Vector_<String_> Split
+	BASE_EXPORT Vector_<String_> Split
 		(const String_& src,
-		char separator,
-		bool keep_empties);
+		 char separator,
+		 bool keep_empties);
 
 	bool IsNumber(const String_& src);
 	double ToDouble(const String_& src);	
-	int ToInt(const String_& src);
+	BASE_EXPORT int ToInt(const String_& src);
 	String_ FromDouble(double src);
 	BASE_EXPORT String_ FromInt(int src);
 	BASE_EXPORT String_ Condensed(const String_& src);

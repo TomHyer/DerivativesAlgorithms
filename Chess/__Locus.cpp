@@ -49,12 +49,12 @@ locus is integer[][]
         default:
         case 1:
             REQUIRE(weights.size() == 3, "Knight takes 3 weights");
-            temp = MakeLocus([=](int j) { return Locus::MinorDist_(NAtt, weights[0], weights[1], weights[2])(k_loc, j); }, n_locus);
+            temp = MakeLocus([=](int j) { return Locus::MinorDist_(false, NAtt, weights[0], 0, weights[1], weights[2])(k_loc, j); }, n_locus);
             break;
 
         case 2:
             REQUIRE(weights.size() == 3, "Bishop takes 3 weights");
-            temp = MakeLocus([=](int j) { return Locus::MinorDist_(BMask, weights[0], weights[1], weights[2])(k_loc, j); }, n_locus);
+            temp = MakeLocus([=](int j) { return Locus::MinorDist_(false, BMask, weights[0], 0, weights[1], weights[2])(k_loc, j); }, n_locus);
             break;
 
         case 3:
@@ -64,7 +64,7 @@ locus is integer[][]
 
         case 4:
             REQUIRE(weights.size() == 3, "Queen takes 3 weights");
-            temp = MakeLocus([=](int j) { return Locus::MinorDist_(QMask, weights[0], weights[1], weights[2])(k_loc, j); }, n_locus);
+            temp = MakeLocus([=](int j) { return Locus::MinorDist_(false, QMask, weights[0], 0, weights[1], weights[2])(k_loc, j); }, n_locus);
             break;
 
         case 5:
@@ -74,7 +74,7 @@ locus is integer[][]
 
         case 6:
             REQUIRE(weights.size() == 2, "Rook still takes 2 weights");
-            temp = MakeLocus([=](int j) { return Locus::MinorDist_(RMask, weights[0], weights[1])(k_loc, j); }, n_locus);
+            temp = MakeLocus([=](int j) { return Locus::MinorDist_(false, RMask, weights[0], 0, weights[1], 0)(k_loc, j); }, n_locus);
             break;
         }
         *locus = UnpackToMatrix(temp);

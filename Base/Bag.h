@@ -25,4 +25,3 @@ struct BASE_EXPORT Bag_ : Storable_
 	Bag_(const String_& name, const std::multimap<String_, Handle_<Storable_>>& objects) : Storable_("Bag", name), contents_(objects) {}
 	void Write(Archive::Store_& dst) const override;
 };
-
