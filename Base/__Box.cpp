@@ -23,8 +23,8 @@ object is handle Box
 
    void Box_New
       (const Matrix_<Cell_>& contents,
-      const String_& name,
-      Handle_<Box_>* object)
+       const String_& name,
+       Handle_<Box_>* object)
    {
       object->reset(new Box_(name, contents));
    }

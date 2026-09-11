@@ -83,6 +83,10 @@ namespace Excel
 		REQUIRE(!retval.Empty(), "Input object has wrong type");
 		return retval;
 	}
+	template<class T_> Handle_<T_> ToOptionalHandle(_ENV, const OPER_* src)
+	{
+		return ToHandle<T_>(_env, src, true);
+	}
 	template<class T_> Vector_<Handle_<T_> > ToHandleVector(_ENV, const OPER_* src)
 	{
 		const Vector_<Handle_<Storable_> > base = ToHandleVectorBase(_env, src);

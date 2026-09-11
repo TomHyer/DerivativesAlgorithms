@@ -43,10 +43,10 @@ inline bool IsZero(double x) { return x < DA::EPSILON && -x < DA::EPSILON; }
 inline bool IsPositive(double x) { return x >= DA::EPSILON; }
 inline bool IsNegative(double x) { return x <= -DA::EPSILON; }
 
-template<class T_> constexpr T_ Square(const T_& x) { return x * x; }
-template<class T_> T_ Cube(const T_& x) { return x * x * x; }
-template<class T_> constexpr const T_& Max(const T_& a, const T_& b) { return a > b ? a : b; }
-template<class T_> constexpr const T_& Min(const T_& a, const T_& b) { return a < b ? a : b; }
+template<class T_> inline constexpr T_ Square(const T_& x) { return x * x; }
+template<class T_> inline  T_ Cube(const T_& x) { return x * x * x; }
+template<class T_> inline constexpr const T_& Max(const T_& a, const T_& b) { return a > b ? a : b; }
+template<class T_> inline constexpr const T_& Min(const T_& a, const T_& b) { return a < b ? a : b; }
 struct Empty_ {};
 
 template<class T_> class Handle_ : public std::shared_ptr<const T_>

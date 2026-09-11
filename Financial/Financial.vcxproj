@@ -19,36 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b795d0cd-d1fd-4891-92cb-ce41c19d3dc8}</ProjectGuid>
-    <RootNamespace>Sudoku</RootNamespace>
+    <ProjectGuid>{1b9f07db-ea75-4b61-815c-0a1232f6cdb2}</ProjectGuid>
+    <RootNamespace>Financial</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -92,20 +92,18 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;SUDOKU_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);IS_FINANCIAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Base.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\common.mgl -l Sudoku.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Financial.mgl</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -114,10 +112,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;SUDOKU_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);IS_FINANCIAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -126,30 +122,28 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Base.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\common.mgl -l Sudoku.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Financial.mgl</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;SUDOKU_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);IS_FINANCIAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Base.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\common.mgl -l Sudoku.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Financial.mgl</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,10 +152,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;SUDOKU_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);IS_FINANCIAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -170,19 +162,50 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Base.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\common.mgl -l Sudoku.mgl</Command>
+      <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Financial.mgl</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="KillerSudoku.cpp" />
-    <ClCompile Include="__Sudoku.cpp" />
+    <ClInclude Include="AccrualPeriod.h" />
+    <ClInclude Include="Currency.h" />
+    <ClInclude Include="DateIncrement.h" />
+    <ClInclude Include="DayBasis.h" />
+    <ClInclude Include="Export.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="Holiday.h" />
+    <ClInclude Include="HolidayData.h" />
+    <ClInclude Include="Payment.h" />
+    <ClInclude Include="ReceivePay.h" />
+    <ClInclude Include="Report.h" />
+    <ClInclude Include="ReportUtils.h" />
+    <ClInclude Include="Risk.h" />
+    <ClInclude Include="Semianalytic.h" />
+    <ClInclude Include="Underlying.h" />
+    <ClInclude Include="Valuation.h" />
+    <ClInclude Include="ValuationMethod.h" />
+    <ClInclude Include="ValueHistorical.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Export.h" />
-    <ClInclude Include="KillerSudoku.h" />
+    <ClCompile Include="AccrualPeriod.cpp" />
+    <ClCompile Include="Currency.cpp" />
+    <ClCompile Include="DateIncrement.cpp" />
+    <ClCompile Include="DayBasis.cpp" />
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="Holiday.cpp" />
+    <ClCompile Include="HolidayData.cpp" />
+    <ClCompile Include="Payment.cpp" />
+    <ClCompile Include="ReceivePay.cpp" />
+    <ClCompile Include="Report.cpp" />
+    <ClCompile Include="Risk.cpp" />
+    <ClCompile Include="Semianalytic.cpp" />
+    <ClCompile Include="Underlying.cpp" />
+    <ClCompile Include="Valuation.cpp" />
+    <ClCompile Include="ValuationMethod.cpp" />
+    <ClCompile Include="__Date.cpp" />
+    <ClCompile Include="__Globals.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

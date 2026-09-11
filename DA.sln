@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Base", "Base\Base.vcxproj", "{69357F6A-3938-4A99-9545-95FD4AAEA1C0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sudoku", "Sudoku\Sudoku.vcxproj", "{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Enigmas", "Enigmas\Enigmas.vcxproj", "{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{69357F6A-3938-4A99-9545-95FD4AAEA1C0} = {69357F6A-3938-4A99-9545-95FD4AAEA1C0}
 	EndProjectSection

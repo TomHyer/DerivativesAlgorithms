@@ -18,6 +18,9 @@
     <ClCompile Include="__Sudoku.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="__Synchrotron.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="KillerSudoku.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

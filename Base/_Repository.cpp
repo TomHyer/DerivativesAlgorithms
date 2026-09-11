@@ -28,7 +28,7 @@ namespace
 	template<class FUNC_, typename ... ARGS_>
 	auto ApplyToObjects(FUNC_ func, ARGS_ ... args)
 	{
-		return TheObjects().Apply([&](vals_t objects) { return func(objects, args ...); });
+		return TheObjects().Apply([&](vals_t& objects) { return func(objects, args ...); });
 	}
 
 

@@ -95,8 +95,8 @@ Grid_ RandomGrid()
 
 	// produce the output grid
 	Grid_ retval;
-	for (auto ps = squares.begin(); ps != squares.end(); ++ps)
-		retval.vals_(ps->loc_.row_, ps->loc_.col_) = ps->val_;
+	for (auto s : squares)
+		retval.vals_(s.loc_.row_, s.loc_.col_) = s.val_;
 	return retval;
 }
 
@@ -187,8 +187,8 @@ void AddGroup
 		g += *g2;
 	Sort(&g.contents_);
 	short sum = 0;
-	for (auto p = g.begin(); p != g.end(); ++p)
-		sum += key[*p];
+	for (const Loc_& loc : g)
+		sum += key[loc];
 	// now walk backwards through the group
 	for (int iLeft = 0; iLeft < g.contents_.size(); ++iLeft)
 	{
@@ -250,10 +250,10 @@ Grid_ LastSolution
 	}
 	// go through groups, creating exclusions and sums
 	Vector_<RangeConstraint_> ranges(81);
-	for (auto pg = groups.begin(); pg != groups.end(); ++pg)
+	for (const Group_& g : groups)
 	{
-		if (&*pg != g1 && &*pg != g2)
-			AddGroup(key, *pg, 0, &exclusions, &ranges);
+		if (&g != g1 && &g != g2)
+			AddGroup(key, g, 0, &exclusions, &ranges);
 	}
 	if (g1)
 		AddGroup(key, *g1, g2, &exclusions, &ranges);
@@ -324,17 +324,17 @@ struct PairSet_
 	}
 	void operator+=(const PairSet_& rhs)
 	{
-		for (auto pa = rhs.vals_.begin(); pa != rhs.vals_.end(); ++pa)
-			for (auto pb = pa->second.begin(); pb != pa->second.end(); ++pb)
-				Add(pa->first, *pb);
+		for (const auto& a : rhs.vals_)
+			for (const auto& b : a.second)
+				Add(a.first, b);
 	}
 };
 
 bool Allowed(const Vector_<Group_>& groups, const PairSet_& forbidden)
 {
-	for (auto pg = groups.begin(); pg != groups.end(); ++pg)
-		for (auto pe = pg->begin(); pe != pg->end(); ++pe)
-			for (auto qe = Next(pe); qe != pg->end(); ++qe)
+	for (const Group_& g : groups)
+		for (auto pe = g.begin(); pe != g.end(); ++pe)
+			for (auto qe = Next(pe); qe != g.end(); ++qe)
 				if (forbidden(*pe, *qe) || forbidden(*qe, *pe))
 					return false;
 	return true;
@@ -343,15 +343,15 @@ bool Allowed(const Vector_<Group_>& groups, const PairSet_& forbidden)
 bool CanMerge(const Vector_<Group_>& all_groups, const Group_& g1, const Group_& g2, const Grid_& grid, const PairSet_& forbidden)
 {
 	bool adjacent = false;
-	for (auto p1 = g1.begin(); p1 != g1.end(); ++p1)
+	for (const Loc_& l1 : g1)
 	{
-		for (auto p2 = g2.begin(); p2 != g2.end(); ++p2)
+		for (const Loc_& l2 : g2)
 		{
-			if (grid[*p1] == grid[*p2])
+			if (grid[l1] == grid[l2])
 				return false;
-			if (forbidden(*p1, *p2) || forbidden(*p2, *p1))
+			if (forbidden(l1, l2) || forbidden(l2, l1))
 				return false;
-			adjacent = adjacent || Adjacent(*p1, *p2);
+			adjacent = adjacent || Adjacent(l1, l2);
 		}
 	}
 	// passed the fast tests -- now check solubility
@@ -364,40 +364,40 @@ PairSet_ ForbidMore(const Group_& g1, const Group_& g2, const Grid_& grid)
 {
 	PairSet_ retval;
 	// prevent one failure mode we know about
-	for (auto p1 = g1.begin(); p1 != g1.end(); ++p1)
+	for (const Loc_& l1 : g1)
 	{
-		for (auto p2 = g2.begin(); p2 != g2.end(); ++p2)
+		for (const Loc_& l2 : g2)
 		{
-			if (p1->row_ == p2->row_)
+			if (l1.row_ == l2.row_)
 			{
-				const short c1 = p1->col_, c2 = p2->col_;
+				const short c1 = l1.col_, c2 = l2.col_;
 				for (short ir = 0; ir < 9; ++ir)
 				{
-					if (grid.vals_(ir, c1) == grid[*p2] && grid.vals_(ir, c2) == grid[*p1])
+					if (grid.vals_(ir, c1) == grid[l2] && grid.vals_(ir, c2) == grid[l1])
 						retval.Add(Loc_(ir, c1), Loc_(ir, c2));
 					const short jr = 3 * (ir / 3) + 1;
 					if (jr != ir)
 					{
-						if (grid.vals_(ir, c1) == grid[*p2] && grid.vals_(jr, c2) == grid[*p1])
+						if (grid.vals_(ir, c1) == grid[l2] && grid.vals_(jr, c2) == grid[l1])
 							retval.Add(Loc_(ir, c1), Loc_(jr, c2));
-						if (grid.vals_(jr, c1) == grid[*p2] && grid.vals_(ir, c2) == grid[*p1])
+						if (grid.vals_(jr, c1) == grid[l2] && grid.vals_(ir, c2) == grid[l1])
 							retval.Add(Loc_(jr, c1), Loc_(ir, c2));
 					}
 				}
 			}
-			else if (p1->col_ == p2->col_)
+			else if (l1.col_ == l2.col_)
 			{
-				const short r1 = p1->row_, r2 = p2->row_;
+				const short r1 = l1.row_, r2 = l2.row_;
 				for (short ic = 0; ic < 9; ++ic)
 				{
-					if (grid.vals_(r1, ic) == grid[*p2] && grid.vals_(r2, ic) == grid[*p1])
+					if (grid.vals_(r1, ic) == grid[l2] && grid.vals_(r2, ic) == grid[l1])
 						retval.Add(Loc_(r1, ic), Loc_(r2, ic));
 					const short jc = 3 * (ic / 3) + 1;
 					if (jc != ic)
 					{
-						if (grid.vals_(r1, jc) == grid[*p2] && grid.vals_(r2, ic) == grid[*p1])
+						if (grid.vals_(r1, jc) == grid[l2] && grid.vals_(r2, ic) == grid[l1])
 							retval.Add(Loc_(r1, jc), Loc_(r2, ic));
-						if (grid.vals_(r1, ic) == grid[*p2] && grid.vals_(r2, jc) == grid[*p1])
+						if (grid.vals_(r1, ic) == grid[l2] && grid.vals_(r2, jc) == grid[l1])
 							retval.Add(Loc_(r1, ic), Loc_(r2, jc));
 					}
 				}
@@ -410,12 +410,12 @@ PairSet_ ForbidMore(const Group_& g1, const Group_& g2, const Grid_& grid)
 int Edginess(const Group_& group)	// a measure of the difficulty of finding adjacent groups
 {
 	bool t = false, b = false, r = false, l = false;
-	for (auto pe = group.begin(); pe != group.end(); ++pe)
+	for (const Loc_& loc : group)
 	{
-		l = l || pe->row_ == 0;
-		r = r || pe->row_ == 8;
-		t = t || pe->col_ == 0;
-		b = b || pe->col_ == 8;
+		l = l || loc.row_ == 0;
+		r = r || loc.row_ == 8;
+		t = t || loc.col_ == 0;
+		b = b || loc.col_ == 8;
 	}
 	return (t ? 1 : 0) + (b ? 1 : 0) + (r ? 1 : 0) + (l ? 1 : 0);
 }
@@ -423,8 +423,8 @@ int Edginess(const Group_& group)	// a measure of the difficulty of finding adja
 bool HasTwoSingletons(const Vector_<Group_>& groups)
 {
 	int ns = 0;
-	for (auto pg = groups.begin(); pg != groups.end(); ++pg)
-		if (pg->contents_.size() == 1)
+	for (const Group_& g : groups)
+		if (g.contents_.size() == 1)
 			if (++ns > 1)
 				return true;
 	return false;
@@ -483,8 +483,8 @@ Vector_<Group_> MakeGroups(const Grid_& grid, double entropy, int max_tries = 10
 // sort groups by comparing "first" cell -- this is not very meaningful but goodenuf
 void Sort(Vector_<Group_>* groups)
 {
-	for (auto pg = groups->begin(); pg != groups->end(); ++pg)
-		Sort(&pg->contents_);
+	for (auto& g : *groups)
+		Sort(&g.contents_);
 	sort(groups->begin(), groups->end(), [](const Group_& lhs, const Group_& rhs) { return *lhs.begin() < *rhs.begin(); });
 }
 
@@ -518,16 +518,16 @@ Matrix_<Cell_> KS(double entropy, int seed, bool minimal)
 	String_ gid("A");
 	for (auto pg = groups.begin(); pg != groups.end(); ++pg, ++gid[0])
 	{
-		for (auto pe = pg->begin(); pe != pg->end(); ++pe)
+		for (const Loc_& loc : *pg)
 		{
-			group(pe->row_, pe->col_) = gid[0];
-			if (pe == pg->begin())	// only write the sum once
+			group(loc.row_, loc.col_) = gid[0];
+			if (&loc == &*pg->begin())	// only write the sum once
 			{
 				String_ s = String::FromInt(Sum(*pg, grid));
-				text(pe->row_, pe->col_) = minimal ? s : gid + ':' + s + '/' + String::FromInt(pg->contents_.size());
+				text(loc.row_, loc.col_) = minimal ? s : gid + ':' + s + '/' + String::FromInt(pg->contents_.size());
 			}
 			else if (!minimal)
-				text(pe->row_, pe->col_) = gid;
+				text(loc.row_, loc.col_) = gid;
 		}
 		if (gid[0] == 'Z')
 			gid[0] -= 26;

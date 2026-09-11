@@ -9,10 +9,12 @@
     <LocalDebuggerCommand>"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE"</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>$(TargetPath)</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArgumentsHistory>C:\dev\DA\x64\Debug\Base.dll|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerCommand>"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE"</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>$(TargetPath)</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArgumentsHistory>C:\dev\DA\x64\Release\Base.dll|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
 </Project>
