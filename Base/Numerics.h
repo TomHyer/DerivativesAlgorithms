@@ -19,7 +19,7 @@ template<class C_> typename C_::value_type Accumulate(const C_& src)
 
 template<class C1_, class C2_> typename C1_::value_type InnerProduct(const C1_& src1, const C2_& src2)
 {
-	typedef typename C1_::value_type value_type;
+	using value_type = typename C1_::value_type;
 	return std::inner_product(src1.begin(), src1.end(), src2.begin(), value_type());
 }
 

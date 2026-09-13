@@ -999,7 +999,7 @@ namespace
 {
    template<class T_> auto ReadVector(const OPER_* src, bool optional, T_ read_scalar)->Vector_<decltype(read_scalar(src))>
    {
-      typedef decltype(read_scalar(src)) element_t;
+      using element_t = decltype(read_scalar(src));
       if (IsBlank(*src))
       {
          REQUIRE(optional, "Missing input vector");

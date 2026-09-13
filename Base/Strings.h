@@ -23,7 +23,7 @@ namespace
 // traits for case-insensitive string
 struct ci_traits : std::char_traits<char>
 {
-	typedef char _E;
+	using _E = char;
 	static inline unsigned char SortVal(const _E& _X)
 	{
 		unsigned char X(_X);
@@ -44,7 +44,7 @@ struct ci_traits : std::char_traits<char>
 // the inheritance, like that of Vector_, is safe as long as we add no data members
 class BASE_EXPORT String_ : public std::basic_string<char, ci_traits>
 {
-   typedef std::basic_string<char, ci_traits> base_t;
+   using base_t = std::basic_string<char, ci_traits>;
 public:
 	String_() {}
 	String_(const char* src) : base_t(src) {}

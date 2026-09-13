@@ -87,7 +87,7 @@ INLINE uint32 Low32(const uint64& x)
 	return (uint32)(x);
 }
 
-typedef int(*pop_func_t)(const uint64&);
+using pop_func_t = int(*)(const uint64&);
 inline int pop0(const uint64& b) { return popcnt(b); }
 struct pop0_
 {

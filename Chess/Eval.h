@@ -23,7 +23,7 @@ struct GEvalInfo
 // setting any of these to call also triggers a call to eval_stalemate
 // so they should never call eval_stalemate themselves
 struct State_;
-typedef void(*eval_special_t)(GEvalInfo& EI, const State_& board, pop_func_t pop);
+using eval_special_t = void(*)(GEvalInfo& EI, const State_& board, pop_func_t pop);
 // here is a function that exists only to trigger eval_stalemate
 inline void eval_null(GEvalInfo&, const State_&, pop_func_t) {}
 inline void eval_unwinnable(GEvalInfo& EI, const State_&, pop_func_t) { EI.mul = 0; }

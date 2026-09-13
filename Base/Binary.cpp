@@ -20,7 +20,7 @@
 
 using std::map;
 using std::shared_ptr;
-typedef unsigned char uint8;
+using uint8 = unsigned char;
 
 namespace
 {

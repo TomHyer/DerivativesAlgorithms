@@ -103,7 +103,7 @@ object is handle Lexicon
     struct Dict_
     {
         Vector_<String_> words_;
-        typedef Vector_<String_>::const_iterator iter_t;
+        using iter_t = Vector_<String_>::const_iterator;
 
         struct Range_
         {

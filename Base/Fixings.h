@@ -9,7 +9,7 @@
 class BASE_EXPORT Fixings_ : public Storable_
 {
 public:
-	typedef std::map<DateTime_, double> vals_t;
+	using vals_t = std::map<DateTime_, double>;
 	const vals_t vals_;
 
 	Fixings_

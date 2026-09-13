@@ -3,17 +3,17 @@
 
 template<class T_> struct ElementHolder_
 {
-	typedef std::shared_ptr<T_> type;
+	using type_ = std::shared_ptr<T_>;
 };
 template<class T_> struct ElementHolder_<const T_>
 {
-	typedef Handle_<T_> type;
+	using type_ = Handle_<T_>;
 };
 
 template<class T_, class H_ = typename ElementHolder_<T_>::type> class Composite_ : public std::remove_const<T_>::type
 {
 public:
-	typedef H_ element_t;
+	using element_t = H_;
 protected:
 	Vector_<element_t> contents_;
 public:
@@ -23,7 +23,7 @@ public:
 	}
 	void Append(T_* p) { Append(element_t(p)); }
 	int Size() const { return contents_.size(); }
-	int Empty() const { return contents_.empty(); }
+	bool Empty() const { return contents_.empty(); }
 
 	T_* operator[](int i)
 	{
@@ -54,7 +54,7 @@ public:
 	T_& operator=(const T_& rhs);
 };
 
-template<class T_> Composite_<T_>& CastComposite(T_* src)
+template<class T_> Composite_<T_>* CastComposite(T_* src)
 {
 	return dynamic_cast<Composite_<T_>*>(src);
 }
@@ -63,7 +63,7 @@ template<class T_> Composite_<T_>& CoerceComposite(T_* src)
 	assert(dynamic_cast<Composite_<T_>*>(src));
 	return static_cast<Composite_<T_>&>(*src);
 }
-template<class T_> const Composite_<T_>& CastComposite(const T_* src)
+template<class T_> const Composite_<T_>* CastComposite(const T_* src)
 {
 	return dynamic_cast<Composite_<T_>*>(src);
 }

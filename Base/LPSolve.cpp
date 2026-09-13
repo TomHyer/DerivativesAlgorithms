@@ -101,7 +101,7 @@ template<class MATRIX_, class COLS_, class LU_> struct Simplex_
         nMax_ = MAX_FACTORIZATIONS * Max(m_, n_);
         ad_ = Apply([](int x) { return x == 0 ? 0 : 1; }, initvars_);
         ad_.Append(Vector_<int>(m_, 1));
-        ord_ = Apply([&](int ii) { return initvars_[ii + n_] >= 0 ? ii + n : ii - m_ - 1; }, Vector::UpTo(m_));
+        ord_ = Apply([&](int ii) { return initvars_[ii + n_] >= 0 ? ii + n : ii - m_ - 1; }, std::views::iota(0, m_));
 
         a_.Set(sa_);
         lu_ = a_.Decompose();

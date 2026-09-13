@@ -18,7 +18,7 @@
 
 namespace
 {
-	typedef std::map<String_, Handle_<Storable_>> vals_t;
+	using vals_t = std::map<String_, Handle_<Storable_>>;
 
 	MutexProtected_<vals_t>& TheObjects()
 	{

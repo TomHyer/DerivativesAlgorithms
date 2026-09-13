@@ -57,6 +57,8 @@ namespace Exception
 		{
 			PushStack(XStackInfo_(msg));
 		}
+		// never use a temporary
+		template<class T_> StackRegister_(const char* name, T_&&) = delete;
 	};
 }
 

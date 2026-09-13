@@ -8,7 +8,7 @@
 
 namespace
 {
-	typedef Matrix_<Cell_> Table_;
+	using Table_ = Matrix_<Cell_>;
 
 	struct WriterView_
 	{

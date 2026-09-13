@@ -51,7 +51,7 @@ struct Empty_ {};
 
 template<class T_> class Handle_ : public std::shared_ptr<const T_>
 {
-	typedef typename std::shared_ptr<const T_> base_t;
+	using base_t = typename std::shared_ptr<const T_>;
 public:
 	Handle_() : base_t() {}
 	Handle_(const T_* src) : base_t(src) {}
@@ -66,7 +66,7 @@ template<class T_, class U_> Handle_<T_> handle_cast(const std::shared_ptr<U_>& 
 
 template<class T, class... Args > Handle_<T> make_handle(Args&&... args)
 {
-	return std::make_shared<const T>(args);
+	return std::make_shared<const T>(std::forward<Args>(args)...);
 }
 
 template<typename T_> bool TruthValueOf(const T_& src) { return !!src; }

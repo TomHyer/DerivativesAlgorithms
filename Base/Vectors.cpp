@@ -5,8 +5,6 @@
 
 Vector_<int> Vector::UpTo(int n)
 {
-	Vector_<int> retval(n);
-	for (int ii = 0; ii < n; ++ii)
-		retval[ii] = ii;
-	return retval;
+	auto iota = std::views::iota(0, n);
+	return Vector_<int>(iota.begin(), iota.end());
 }

@@ -37,7 +37,7 @@ class BASE_EXPORT Environment_ : noncopyable
 public:
 	virtual ~Environment_();
 
-	typedef Environment::Entry_ Entry_;
+	using Entry_ = Environment::Entry_;
 	struct BASE_EXPORT IterImp_ : noncopyable
 	{
 		virtual ~IterImp_();

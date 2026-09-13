@@ -11,7 +11,7 @@
 
 namespace
 {
-	typedef std::multimap<int, Handle_<SemianalyticPricer_>, std::greater<int>> pricers_t;
+	using pricers_t = std::multimap<int, Handle_<SemianalyticPricer_>, std::greater<int>>;
 	pricers_t& XThePricers()
 	{
 		RETURN_STATIC(pricers_t);

@@ -5,6 +5,7 @@
 
 #include "Algorithms.h"
 #include "Vectors.h"
+#include "Exceptions.h"
 
 namespace
 {
@@ -134,6 +135,15 @@ Date_ Date::AddMonths(const Date_& dt, int n_months, bool preserve_eom)
 		dd = dMax;
 	return Date_(yy, mm, dd);
 }
+
+Date_ Date_::AddDays(int days) const
+{
+	Date_ retval(*this);
+	int newSerial = static_cast<int>(serial_) + days;
+	REQUIRE(newSerial >= 0 && newSerial < (1 << 16), "AddDays went out of bounds");
+	retval.serial_ = static_cast<short>(newSerial);
+	return retval;
+}	// note this creates a new date; it is operator+, not operator+=
 
 int operator-(const Date_& lhs, const Date_& rhs)
 {

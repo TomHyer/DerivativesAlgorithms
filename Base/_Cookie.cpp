@@ -27,7 +27,7 @@ namespace
 	// the main design consideration for stashable objects is to avoid copying input arrays twice
 	struct Stashable_
 	{
-		typedef std::variant<Handle_<Storable_>, Handle_<Vector_<>>, Handle_<Vector_<int>>, Handle_<String_>> variant_t;
+		using variant_t = std::variant<Handle_<Storable_>, Handle_<Vector_<>>, Handle_<Vector_<int>>, Handle_<String_>>;
 		std::shared_ptr<variant_t> val_;
 
 		Stashable_() {}

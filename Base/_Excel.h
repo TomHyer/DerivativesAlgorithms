@@ -24,7 +24,7 @@ class DateTime_;
 class Dictionary_;
 
 struct xloper12;
-typedef xloper12 OPER_;
+using OPER_ = xloper12;
 OPER_* TempStr(const String_& src);	// takes NON-BYTE-COUNTED input
 #define XL_CALLBACK Excel12v
 

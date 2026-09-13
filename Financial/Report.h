@@ -31,7 +31,7 @@ public:
 	Vector_<String_> Axes() const { return Keys(axes_); }
 	int Size(const String_& axis) const;
 
-	typedef Report::Address_ Address_;
+	using Address_ = Report::Address_;
 	Address_ MakeAddress() const;
 	double& operator[](const Address_& loc);
 	const double& operator[](const Address_& loc) const;

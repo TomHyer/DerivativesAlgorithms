@@ -120,7 +120,7 @@ namespace
 		 bool optional)
 	->Vector_<decltype(translate(nullptr, nullptr))>
 	{
-		typedef Vector_<decltype(translate(jenv, nullptr))> ret_t;
+		using ret_t = Vector_<decltype(translate(jenv, nullptr))>;
 		auto size = jenv->GetArrayLength(src);
 		REQUIRE(size > 0 || optional, "Missing input vector");
 		ret_t retval;

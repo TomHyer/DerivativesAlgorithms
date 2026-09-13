@@ -151,7 +151,7 @@ slice is cell[][]
             if (stop < 0)
                 stop += size;
             REQUIRE(stop > start, "Invalid range");
-            return Apply([&](int ii) { return ii + start; }, Vector::UpTo(stop - start));
+            return Apply([&](int ii) { return ii; }, std::views::iota(start, stop));
         }
 		else
 		{

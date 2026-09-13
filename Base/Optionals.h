@@ -6,7 +6,7 @@
 // syntactic sugar for null default
 template<class T_> const T_& operator+(const std::optional<T_>& opt) 
 { 
-	constexpr T_ ZERO(0);
+	static const T_ ZERO = {};
 	return opt.has_value() ? opt.value() : ZERO;
 }
 

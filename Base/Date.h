@@ -44,7 +44,7 @@ public:
 
 	bool IsValid() const { return serial_ > 0; }
 	Date_& operator=(const Date_& rhs) { serial_ = rhs.serial_; return *this; }
-	inline Date_ AddDays(int days) const { Date_ retval(*this); retval.serial_ += static_cast<short>(days); return retval; }	// note this creates a new date; it is operator+, not operator+=
+	Date_ AddDays(int days) const;
 	inline Date_& operator++() { ++serial_; return *this; }
 	inline Date_& operator--() { --serial_; return *this; }
 };

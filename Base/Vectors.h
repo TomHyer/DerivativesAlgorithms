@@ -8,10 +8,11 @@
 
 template<class E_> class Vector_ : public std::vector<E_>	// default is supplied in Platform.h
 {
-	typedef std::vector<E_> base_t;
+	using base_t = std::vector<E_>;
 public:
 	Vector_() : base_t() {}
 	Vector_(int size) : base_t(size) {}
+	Vector_(unsigned size) : base_t(size) {}
 	Vector_(size_t size) : base_t(size) {}
 	Vector_(int size, const E_& fill) : base_t(size, fill) {}
 	template<class I_> Vector_(I_ start, I_ stop) : base_t(start, stop) {}

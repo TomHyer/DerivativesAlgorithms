@@ -10,7 +10,7 @@ template<class E_> class Matrix_	// default is supplied in Platform.h
 {
 	Vector_<E_> vals_;
 	int cols_;
-	typedef typename Vector_<E_>::iterator I_;
+	using I_ = typename Vector_<E_>::iterator;
 	Vector_<I_> hooks_;
 
 	void SetHooks(int from = 0)
@@ -47,8 +47,8 @@ public:
 	protected:
 		I_ begin_, end_;    // non-const to support Row_, below
 	public:
-		typedef E_ value_type;
-		typedef typename Vector_<E_>::const_iterator const_iterator;
+		using value_type = E_;
+		using const_iterator = typename Vector_<E_>::const_iterator;
 		// construct from begin/end or from begin/size
 		ConstRow_(I_ begin, I_ end) : begin_(begin), end_(end) {}
 		ConstRow_(I_ begin, int size) : begin_(begin), end_(begin + size) {}
@@ -64,8 +64,8 @@ public:
 	struct Row_ : ConstRow_
 	{
 		// inherit data members and const_iterator
-		typedef I_ iterator;
-		Row_(I_ begin, I_ end) : ConstRow_(begin, end) {}
+		using iterator = I_;
+		Row_(I_ begin, I_ end) : ConstRow_(begin, end) {}	
 		Row_(I_ begin, int size) : ConstRow_(begin, size) {}
 
 		// have to double-implement begin/end, otherwise non-const implementations hide the inherited const
@@ -80,59 +80,45 @@ public:
 	Row_ operator[](int i_row) { return Row(i_row); }    // C-style access
 
 	// Iteration through columns is less efficient
-	class ConstCol_
+	template<class RI_> class ColBase_
 	{
 	public:
-		template<typename RI_> struct Iterator_    // column iterator in terms of row iterator
+		struct Iterator_    // column iterator in terms of row iterator
 		{
 			RI_ val_;
 			size_t stride_;
 			Iterator_(RI_ val, size_t stride) : val_(val), stride_(stride) {}
+			Iterator_(const Iterator_&) = default;
+
 			Iterator_& operator++() { val_ += stride_; return *this; }
 			Iterator_ operator++(int) { Iterator_ ret(*this); val_ += stride_; return ret; }
 			Iterator_& operator--() { val_ -= stride_; return *this; }
 			Iterator_ operator--(int) { Iterator_ ret(*this); val_ -= stride_; return ret; }
 			Iterator_ operator+(size_t inc) { Iterator_ ret(*this); ret.val_ += inc * stride_; return ret; }
-			typename RI_::reference operator*() { return *val_; }
 			bool operator==(const Iterator_& rhs) const { assert(stride_ == rhs.stride_); return val_ == rhs.val_; }
 			auto operator<=>(const Iterator_& rhs) const { assert(stride_ == rhs.stride_); return val_.operator<=>(rhs.val_); }
 			typename RI_::difference_type operator-(const Iterator_& rhs) const { assert(stride_ == rhs.stride_); assert((val_ - rhs.val_) % stride_ == 0); return (val_ - rhs.val_) / stride_; }
-			typedef typename std::vector<E_>::iterator::iterator_category iterator_category;
-			typedef typename std::vector<E_>::iterator::difference_type difference_type;
-			typedef E_ value_type;
-			typedef const E_& reference;
-			typedef const E_* pointer;
+
+			typename RI_::reference operator*() { return *val_; }
+			using value_type = E_;
 		};
-		typedef Iterator_<typename Vector_<E_>::iterator> iterator;
 	protected:
-		iterator begin_;    // non-const to support Column_, below
+		Iterator_ begin_;
 		size_t size_;
 	public:
-		typedef E_ value_type;
-		typedef Iterator_<typename Vector_<E_>::const_iterator> const_iterator;
-		ConstCol_(I_ begin, size_t size, size_t stride) : begin_(begin, stride), size_(size) {}
+		using value_type = E_;
+		ColBase_(I_ begin, size_t size, size_t stride) : begin_(begin, stride), size_(size) {}
 
-		const_iterator begin() const { return const_iterator(begin_.val_, begin_.stride_); }
-		const_iterator end() const { return const_iterator(begin_.val_ + size_ * begin_.stride_, begin_.stride_); }
+		Iterator_ begin() const { return begin_; }
+		Iterator_ end() const { return Iterator_(begin_.val_ + size_ * begin_.stride_, begin_.stride_); }
 		size_t size() const { return size_; }
 		const E_& operator[](int row) const { return *(begin_.val_ + row * begin_.stride_); }
 	};
+
+	using ConstCol_ = ColBase_<typename Vector_<E_>::const_iterator>;
 	ConstCol_ Col(int i_col) const { return ConstCol_(hooks_[0] + i_col, hooks_.size(), cols_); }
 
-	class Col_ : ConstCol_
-	{
-		typedef typename ConstCol_::iterator iterator;
-	public:
-		typedef E_ value_type;
-		Col_(I_ begin, int size, int stride) : ConstCol_(begin, size, stride) {}
-
-		iterator begin() const { return ConstCol_::begin_; }
-		iterator end() const { return iterator(ConstCol_::begin_.val_ + ConstCol_::size_ * ConstCol_::begin_.stride_, ConstCol_::begin_.stride_); }
-		E_& operator[](int row) { return *(ConstCol_::begin_.val_ + row * ConstCol_::begin_.stride_); }
-		const E_& operator[](int row) const { return *(ConstCol_::begin_.val_ + row * ConstCol_::begin_.stride_); }
-
-		using ConstCol_::size;
-	};
+	using Col_ = ColBase_<typename Vector_<E_>::iterator>;
 	Col_ Col(int i_col) { return Col_(hooks_[0] + i_col, hooks_.size(), cols_); }
 
 	// POSTPONED -- submatrix
@@ -164,7 +150,7 @@ public:
 			Vector_<E_> newVals(rows * cols);
 			for (int ir = 0; ir < rows && ir < oldRows; ++ir)
 			{
-				copy(hooks_[ir], hooks_[ir] + nCopy, newVals.begin() + ir * cols);
+				std::copy(hooks_[ir], hooks_[ir] + nCopy, newVals.begin() + ir * cols);
 			}
 			vals_.Swap(&newVals);
 			hooks_.Resize(rows);

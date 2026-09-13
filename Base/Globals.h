@@ -27,7 +27,7 @@ namespace XGLOBAL
 {
 	template<class T_> class ScopedOverride_
 	{
-		typedef void(*Setter_)(const T_&);
+		using Setter_ = void(*)(const T_&);
 		T_ saved_;
 		Setter_ setFunc_;
 	public:
