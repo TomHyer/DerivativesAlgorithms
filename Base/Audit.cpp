@@ -48,7 +48,7 @@ const
 	if (mode_ == SHOWING)
 	{
 		auto range = mine_->contents_.equal_range(key);
-		transform(range.first, range.second, std::back_inserter(retval), GetSecond_<String_, Handle_<Storable_>>());
+		transform(range.first, range.second, std::back_inserter(retval), [](const auto& pair) { return pair.second; });
 	}
 	return retval;
 }

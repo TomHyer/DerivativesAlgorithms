@@ -99,9 +99,8 @@ namespace
 	Vector_<Handle_<Storable_> > FindImp(vals_t& objects, const String_& pattern)
 	{
 		std::regex match(pattern);
-		auto all = objects;
 		Vector_<Handle_<Storable_>> retval;
-		for (auto [tag, obj] : all)
+		for (const auto& [tag, obj] : objects)
 		{
 			if (std::regex_search(tag, match))
 				retval.push_back(obj);

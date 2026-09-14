@@ -55,9 +55,9 @@ public:
 	void Resize(const Vector_<int>& new_sizes)
 	{
 		const Vector_<pair<int, int> >& moves = ArrayN::Moves(sizes_, new_sizes);
-		Vector_<E_> newVals(sizes_[0] * strides_[0], E_());
 		sizes_ = new_sizes;
 		strides_ = ArrayN::Strides(sizes_);
+		Vector_<E_> newVals(sizes_[0] * strides_[0], E_());
 		for (auto move : moves)
 			newVals[move.second] = vals_[move.first];
 		vals_.Swap(&newVals);

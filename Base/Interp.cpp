@@ -30,9 +30,17 @@ Interp1Linear_::Interp1Linear_(const String_& name, Range_<> x, const Vector_<>&
 Interp1Linear_::Interp1Linear_(const String_& name, const std::map<double, double>& f)
 :
 Interp1_(name),
-x_(Apply(GetFirst_<double, double>(), f)),
-f_(Apply(GetSecond_<double, double>(), f))
-{	}
+x_(f.size()),
+f_(f.size())
+{	
+	int ii = 0;
+	for (const auto& kv : f)
+	{
+		x_[ii] = kv.first;
+		f_[ii] = kv.second;
+		++ii;
+	}
+}
 
 double Interp1Linear_::operator()(double x) const
 {

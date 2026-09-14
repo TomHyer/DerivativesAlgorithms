@@ -53,6 +53,7 @@ public:
 	template<class I_> String_(I_ begin, I_ end) : base_t(begin, end) {}
 	// we can also add an implicit constructor from std::string
 	String_(const std::string& src) : base_t(*reinterpret_cast<const String_*>(&src)) {}	// I hate calling c_str() unnecessarily
+	String_(std::string&& src) : base_t(reinterpret_cast<String_&&>(std::move(src))) {}
 	// support our swap idiom
 	void Swap(String_* other) { swap(*other); }
    // support an interface idiom
@@ -103,24 +104,31 @@ namespace String
 		return std::to_string(src).c_str();	// no efficient way to convert 
 	}
 
-	struct Joiner_
-	{
-		String_ sep_;
-		bool skipEmpty_;
-		Joiner_(const String_& sep, bool skip_empty = true) : sep_(sep), skipEmpty_(skip_empty) {}
-
-		String_ operator()(const String_& sofar, const String_& more) const
-		{
-			if (sofar.empty())
-				return more;
-			if (more.empty() && skipEmpty_)
-				return sofar;
-			return sofar + sep_ + more;
-		}
-	};
 	template<class C_> String_ Accumulate(const C_& vals, const String_& sep, bool skip_empty = true) 
-	{ 
-		return std::accumulate(vals.begin(), vals.end(), String_(), Joiner_(sep, skip_empty)); 
+	{
+		size_t size = 0;
+		bool begun = false;
+		for (auto v : vals)
+		{
+			size += v.size();
+			if (!v.empty() || !skip_empty)
+				size += sep.size();
+		}
+		if (!size)
+			return String_();
+
+		String_ retval(size, '0');  // too large by one separator
+		auto dst = retval.begin();
+		for (auto v : vals)
+		{
+			if (!v.empty() || !skip_empty)
+			{
+				dst = std::copy(v.begin(), v.end(), dst);
+				dst = std::copy(sep.begin(), sep.end(), dst);
+			}
+		}
+		retval.resize(size - sep.size());
+		return retval;
 	}
 }
 // global forwarding functions

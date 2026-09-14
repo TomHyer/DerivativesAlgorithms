@@ -3,16 +3,6 @@
 
 #include <functional>
 
-template<class F_, class S_> struct GetFirst_
-{
-	F_ operator()(const pair<F_, S_>& src) const { return src.first; }
-};
-
-template<class F_, class S_> struct GetSecond_
-{
-	S_ operator()(const pair<F_, S_>& src) const { return src.second; }
-};		
-
 struct LinearIncrement_
 {
 	double scale_;

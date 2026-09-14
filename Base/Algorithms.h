@@ -154,9 +154,6 @@ template<class C1_, class C2_> auto Zip(const C1_& v1, const C2_& v2)
 }
 
 // unzipping
-template<class P_> typename P_::first_type GetFirst(const P_& pair) { return pair.first; }
-template<class P_> typename P_::second_type GetSecond(const P_& pair) { return pair.second; }
-
 template<template<class> class V_ = Vector_, class C_> auto Keys(const C_& src)
 {
 	auto op = [](const auto& kv) { return kv.first; };

@@ -2,11 +2,13 @@
 #include "Platform.h"
 #include "Strings.h"
 #include <bitset>
+#include <charconv>
 #include "Strict.h"
 
 #include "Vectors.h"
 #include "Algorithms.h"
 #include "Functionals.h"
+#include "Exceptions.h"
 
 Vector_<String_> String::Split
 	(const String_& src,
@@ -35,20 +37,21 @@ Vector_<String_> String::Split
 
 bool String::IsNumber(const String_& src)
 {
-	try
-	{
-		(void)ToDouble(src);
-		return true;
-	}
-	catch (...)
-	{
+	if (src.empty())
 		return false;
-	}
+	double val;
+	const char* const first = src.data();
+	const char* const last = first + src.size();
+	const auto [ptr, ec] = std::from_chars(first, last, val);
+	return ec == std::errc{} && ptr == last;
 }
 
 double String::ToDouble(const String_& src)
 {
-	return std::stod(src.c_str());	// C++ flaw -- stod demands standard traits
+	double val;
+	const auto [ptr, ec] = std::from_chars(src.data(), src.data() + src.size(), val);
+	REQUIRE(ec == std::errc{} && ptr == src.data() + src.size(), "Not a number");
+	return val;
 }
 
 int String::ToInt(const String_& src)
@@ -87,7 +90,7 @@ String_ String::Condensed(const String_& src)
 	for (auto c : src)
 	{
 		if (!IsFluff(c))
-			retval.push_back(static_cast<char>(toupper(c)));
+			retval.push_back(static_cast<char>(toupper(static_cast<unsigned char>(c))));
 	}
 	return retval;
 }

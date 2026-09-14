@@ -19,11 +19,11 @@ template<class E_> class Matrix_	// default is supplied in Platform.h
 			hooks_[ii] = vals_.begin() + ii * cols_;
 	}
 public:
-	virtual ~Matrix_() {}
 	Matrix_() : cols_(0) {}
-	Matrix_(int rows, int cols) : vals_(rows * cols), cols_(cols), hooks_(rows) { SetHooks(); vals_.Fill(E_()); }
+	Matrix_(int rows, int cols) : vals_(rows* cols, E_{}), cols_(cols), hooks_(rows) { SetHooks(); }
 	Matrix_(const Matrix_<E_>& src) : vals_(src.vals_), cols_(src.cols_), hooks_(src.hooks_.size()) { SetHooks(); }
 	void operator=(const Matrix_<E_>& rhs) { vals_ = rhs.vals_; cols_ = rhs.cols_; hooks_.Resize(rhs.hooks_.size()); SetHooks(); }
+	Matrix_(Matrix_<E_>&& src) : vals_(std::move(src.vals_)), cols_(src.cols_), hooks_(std::move(src.hooks_)) { }
 
 	int Rows() const { return hooks_.size(); }
 	int Cols() const { return cols_; }
@@ -129,7 +129,7 @@ public:
 		vals_.Swap(&other->vals_);
 		hooks_.Swap(&other->hooks_);    // works because pointers inside vals_ are swapped
 		std::swap(cols_, other->cols_);
-		assert(hooks_.front() == vals_.begin());
+		assert(hooks_.empty() || hooks_.front() == vals_.begin());
 	}
 	void Fill(const E_& val) { vals_.Fill(val); }
 	template<class T_> void operator*=(const T_& scale) { vals_ *= scale; }

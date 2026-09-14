@@ -236,39 +236,4 @@ namespace
 			? Strip(src.substr(1, src.size() - 2))
 			: src;
 	}
-
-	Writer_* NewWriter(const String_& format)
-	{
-		Vector_<String_> subs = Split(Strip(format), ';');
-		if (subs.size() > 1)	// it's a semicolon-separated list
-		{
-			std::unique_ptr<VerticalWriter_> retval(new VerticalWriter_);
-			for (auto s : subs)
-				retval->elements_.push_back(Handle_<Writer_>(NewWriter(s)));
-			return retval.release();
-		}
-		// ok, no unparenthesized semicolons
-		subs = Split(Strip(format), ',');
-		if (subs.size() > 1)	// it's a sequence
-		{
-			std::unique_ptr<HorizontalWriter_> retval(new HorizontalWriter_);
-			for (auto s : subs)
-				retval->elements_.push_back(Handle_<Writer_>(NewWriter(s)));
-			return retval.release();
-		}
-		// no commas:  just one element
-		const String_& e = subs[0];
-		if (toupper(e.back()) == 'T')
-			return new TransposedWriter_(NewWriter(e.substr(0, e.size() - 1)));
-		else if (toupper(e.back()) == 'I')
-			return new InvertedWriter_(NewWriter(e.substr(0, e.size() - 1)));
-		else
-		{
-			REQUIRE(e.size() == 1 && e.front() >= '0' && e.front() <= '9', "Can't recognize format element -- expected argument index (format = '" + format + "')");
-			return e.front() == '0'
-				? (Writer_*) new EmptyCell_
-				: new ArgWriter_(e.front() - '1');	// implements 1-offset count of args
-		}
-	}
 }	// leave local
-

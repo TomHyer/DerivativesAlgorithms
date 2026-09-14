@@ -37,11 +37,11 @@ public:
 	}
 
 	// Constructible from anything that makes a T_
-   template<typename... Args_> Composite_(Args_&&... args) : T_(std::forward<Args_>(args)...) {}
-   // or from components plus the T_
-   template<typename... Args_> Composite_(const Vector_<element_t>& contents, Args_&&... args) : T_(std::forward<Args_>(args)...), contents_(contents) {}
-   // Copy constructible if T_ is clonable
-	Composite_(const Composite_<T_>& src)
+	template<typename... Args_> Composite_(Args_&&... args) : T_(std::forward<Args_>(args)...) {}
+	// or from components plus the T_
+	template<typename... Args_> Composite_(const Vector_<element_t>& contents, Args_&&... args) : T_(std::forward<Args_>(args)...), contents_(contents) {}
+	// Copy constructible if T_ is clonable
+	Composite_(const Composite_<T_>& src) : T_(src)
 	{
 		for (auto sc : src.contents_)
 			Append(sc ? sc->Clone() : 0);

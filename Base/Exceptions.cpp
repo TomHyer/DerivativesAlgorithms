@@ -1,7 +1,6 @@
 
 #include "Platform.h"
 #include "Exceptions.h"
-//#include <boost/thread/tss.hpp>	// see comments on TheStack(), below
 #include "Strict.h"
 
 #include "Algorithms.h"
@@ -71,20 +70,9 @@ std::string XStackInfo_::Message() const
 
 namespace
 {
-	/* more appropriate implementation for production
-	Vector_<XStackInfo_>& TheStack()
-	{
-		static boost::thread_specific_ptr<Vector_<XStackInfo_>> INSTANCE;
-		if (!INSTANCE.get())	// get is thread-specific
-			INSTANCE.reset(new Vector_<XStackInfo_>);
-		return *INSTANCE;	// so is operator*
-	}
-	*/
-
-	/* less-efficient implementation, used here to avoid boost link dependency */
 	Vector_<XStackInfo_>* XTheStack(bool free_if_empty = false)
 	{
-		__declspec(thread) static Vector_<XStackInfo_>* INSTANCE = nullptr;
+		thread_local static Vector_<XStackInfo_>* INSTANCE = nullptr;
 		if (!INSTANCE)
 			INSTANCE = new Vector_<XStackInfo_>;
 		else if (free_if_empty && INSTANCE->empty())

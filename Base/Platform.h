@@ -77,5 +77,6 @@ template<typename T_> double NumericValueOf(const T_& src) { return double(src);
 #define XRUN_AT_LOAD(c, u1, u2) XXRUN_AT_LOAD(c, u1, u2)
 #define RUN_AT_LOAD(code) XRUN_AT_LOAD(code, __COUNTER__, __LINE__)
 #define RETURN_STATIC(...) static __VA_ARGS__ RETVAL; return RETVAL  // variadic in case type contains commas
+#define RETURN_THREAD_STATIC(...) thread_local static __VA_ARGS__ RETVAL; return RETVAL  // variadic in case type contains commas
 
 #define VALUE_TYPE_OF(expr) typename std::remove_const<typename std::remove_reference<decltype(expr)>::type>::type

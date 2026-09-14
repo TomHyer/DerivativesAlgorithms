@@ -1,6 +1,7 @@
 
 #include "Platform.h"
 #include "Date.h"
+#include <format>
 #include "Strict.h"
 
 #include "Algorithms.h"
@@ -89,13 +90,7 @@ String_ Date::ToString(const Date_& dt)
 {
 	short yy, mm, dd;
 	ExcelDateToYMD(ToExcel(dt), &yy, &mm, &dd);
-	String_ retval("0000-00-00");
-	sprintf(&retval[0], "%4d-%2d-%2d", int(yy), int(mm), int(dd));
-	if (retval[5] == ' ')
-		retval[5] = '0';
-	if (retval[8] == ' ')
-		retval[8] = '0';
-	return retval;
+	return String_(std::format("{:04d}-{:02d}-{:02d}", yy, mm, dd));
 }
 
 short Date::DayOfWeek(const Date_& dt)

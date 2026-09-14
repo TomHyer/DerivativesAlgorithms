@@ -1,5 +1,4 @@
 #define _Regex_traits _Regex_traits_Excel
-#pragma optimize("", off)
 
 #include "Platform.h"
 #include "_Excel.h"
@@ -146,7 +145,7 @@ namespace
 {
 	static std::deque<String_>& TheTempMemory()
 	{
-      RETURN_STATIC(std::deque<String_>);
+		RETURN_THREAD_STATIC(std::deque<String_>);
 	}
 
 	template<class T_> void FreeContents(T_& cell, bool force_free = false)

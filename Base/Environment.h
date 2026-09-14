@@ -62,7 +62,7 @@ namespace Environment
 {
 	// most generic iterator through entries
 	template<typename F_> void Iterate
-		(const Environment_* env, F_& func)
+		(const Environment_* env, F_ func)
 	{
 		if (env)
 			for (auto pe = env->Begin(); pe.IsValid(); ++pe)
@@ -74,8 +74,8 @@ namespace Environment
 		(const Environment_* env)
 	{
 		Vector_<const T_*> retval;
-		Iterate(env, [&](const Handle_<Entry_>& h)
-				{if (auto t = dynamic_cast<const T_*>(h.get()))
+		Iterate(env, [&](const Entry_& h)
+				{if (auto t = dynamic_cast<const T_*>(&h))
 		         retval.push_back(t); });
 		return retval;
 	}

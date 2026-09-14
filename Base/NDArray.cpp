@@ -27,6 +27,7 @@ Vector_<pair<int, int>> ArrayN::Moves
 	Vector_<pair<int, int>> retval;
 	for (;;)
 	{
+		retval.push_back(make_pair(InnerProduct(loc, oldStrides), InnerProduct(loc, newStrides)));
 		int depth;
 		for (depth = 0; depth < nd; ++depth)
 		{
@@ -36,7 +37,6 @@ Vector_<pair<int, int>> ArrayN::Moves
 		}
 		if (depth == nd)
 			return retval;
-		retval.push_back(make_pair(InnerProduct(loc, oldStrides), InnerProduct(loc, newStrides)));
 	}
 }
 

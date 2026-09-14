@@ -17,3 +17,4 @@ void Environment_::Iterator_::operator++()
 	if (IsValid())
 		imp_.reset(imp_->Next());
 }
+

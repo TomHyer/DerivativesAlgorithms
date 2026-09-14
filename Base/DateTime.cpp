@@ -2,6 +2,7 @@
 #include "Platform.h"
 #include "DateTime.h"
 #include <tuple>
+#include <format>
 #include "Strict.h"
 
 #include "Algorithms.h"
@@ -47,12 +48,7 @@ String_ DateTime::TimeString(const DateTime_& dt)
 {
 	int h, m, s;
 	FracToHMS(dt.Frac(), &h, &m, &s);
-	String_ retval("00:00:00");
-	sprintf(&retval[0], "%2d:%2d:%2d", h, m, s);
-	for (int ii = 0; ii < 8; ii += 3)
-		if (retval[ii] == ' ')
-			retval[ii] = '0';
-	return retval;
+	return String_(std::format("{:02d}:{:02d}:{:02d}", h, m, s));
 }
 
 DateTime_ DateTime::Minimum()

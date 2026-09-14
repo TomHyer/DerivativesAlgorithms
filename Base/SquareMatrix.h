@@ -15,8 +15,8 @@ public:
 	
 	operator const Matrix_<E_>&() const { return val_; }
 	// conversion to Matrix_ lets us use non-member functions taking a Matrix_ input, but we need to re-publish members
-	double& operator()(int i, int j) { return val_(i, j); }
-	const double& operator()(int i, int j) const
+	E_& operator()(int i, int j) { return val_(i, j); }
+	const E_& operator()(int i, int j) const
 	{
 		return val_(i, j);
 	}
