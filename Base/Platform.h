@@ -54,7 +54,7 @@ template<class T_> class Handle_ : public std::shared_ptr<const T_>
 	using base_t = typename std::shared_ptr<const T_>;
 public:
 	Handle_() : base_t() {}
-	Handle_(const T_* src) : base_t(src) {}
+	explicit Handle_(const T_* src) : base_t(src) {}
 	Handle_(const base_t& src) : base_t(src) {}
 	bool Empty() const { return !base_t::get(); }
 };

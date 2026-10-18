@@ -30,6 +30,10 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		ExcelDebug|x64 = ExcelDebug|x64
+		ExcelDebug|x86 = ExcelDebug|x86
+		ExcelRelease|x64 = ExcelRelease|x64
+		ExcelRelease|x86 = ExcelRelease|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -42,6 +46,14 @@ Global
 		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.Release|x64.Build.0 = Release|x64
 		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.Release|x86.ActiveCfg = Release|Win32
 		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.Release|x86.Build.0 = Release|Win32
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelDebug|x64.ActiveCfg = ExcelDebug|x64
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelDebug|x64.Build.0 = ExcelDebug|x64
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelDebug|x86.ActiveCfg = ExcelDebug|Win32
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelDebug|x86.Build.0 = ExcelDebug|Win32
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelRelease|x64.ActiveCfg = ExcelRelease|x64
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelRelease|x64.Build.0 = ExcelRelease|x64
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelRelease|x86.ActiveCfg = ExcelRelease|Win32
+		{69357F6A-3938-4A99-9545-95FD4AAEA1C0}.ExcelRelease|x86.Build.0 = ExcelRelease|Win32
 		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.Debug|x64.ActiveCfg = Debug|x64
 		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.Debug|x64.Build.0 = Debug|x64
 		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.Debug|x86.ActiveCfg = Debug|Win32
@@ -50,6 +62,14 @@ Global
 		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.Release|x64.Build.0 = Release|x64
 		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.Release|x86.ActiveCfg = Release|Win32
 		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.Release|x86.Build.0 = Release|Win32
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelDebug|x64.ActiveCfg = ExcelDebug|x64
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelDebug|x64.Build.0 = ExcelDebug|x64
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelDebug|x86.ActiveCfg = ExcelDebug|Win32
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelDebug|x86.Build.0 = ExcelDebug|Win32
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelRelease|x64.ActiveCfg = ExcelRelease|x64
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelRelease|x64.Build.0 = ExcelRelease|x64
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelRelease|x86.ActiveCfg = ExcelRelease|Win32
+		{B795D0CD-D1FD-4891-92CB-CE41C19D3DC8}.ExcelRelease|x86.Build.0 = ExcelRelease|Win32
 		{D028A799-2950-4B55-A284-8184A93FD9C5}.Debug|x64.ActiveCfg = Debug|x64
 		{D028A799-2950-4B55-A284-8184A93FD9C5}.Debug|x64.Build.0 = Debug|x64
 		{D028A799-2950-4B55-A284-8184A93FD9C5}.Debug|x86.ActiveCfg = Debug|Win32
@@ -58,6 +78,14 @@ Global
 		{D028A799-2950-4B55-A284-8184A93FD9C5}.Release|x64.Build.0 = Release|x64
 		{D028A799-2950-4B55-A284-8184A93FD9C5}.Release|x86.ActiveCfg = Release|Win32
 		{D028A799-2950-4B55-A284-8184A93FD9C5}.Release|x86.Build.0 = Release|Win32
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelDebug|x64.ActiveCfg = ExcelDebug|x64
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelDebug|x64.Build.0 = ExcelDebug|x64
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelDebug|x86.ActiveCfg = ExcelDebug|Win32
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelDebug|x86.Build.0 = ExcelDebug|Win32
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelRelease|x64.ActiveCfg = ExcelRelease|x64
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelRelease|x64.Build.0 = ExcelRelease|x64
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelRelease|x86.ActiveCfg = ExcelRelease|Win32
+		{D028A799-2950-4B55-A284-8184A93FD9C5}.ExcelRelease|x86.Build.0 = ExcelRelease|Win32
 		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.Debug|x64.ActiveCfg = Debug|x64
 		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.Debug|x64.Build.0 = Debug|x64
 		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.Debug|x86.ActiveCfg = Debug|Win32
@@ -66,6 +94,14 @@ Global
 		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.Release|x64.Build.0 = Release|x64
 		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.Release|x86.ActiveCfg = Release|Win32
 		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.Release|x86.Build.0 = Release|Win32
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelDebug|x64.ActiveCfg = ExcelDebug|x64
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelDebug|x64.Build.0 = ExcelDebug|x64
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelDebug|x86.ActiveCfg = ExcelDebug|Win32
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelDebug|x86.Build.0 = ExcelDebug|Win32
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelRelease|x64.ActiveCfg = ExcelRelease|x64
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelRelease|x64.Build.0 = ExcelRelease|x64
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelRelease|x86.ActiveCfg = ExcelRelease|Win32
+		{7A592A83-6EA8-4A46-A2BE-0F8C4ECA99A6}.ExcelRelease|x86.Build.0 = ExcelRelease|Win32
 		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.Debug|x64.ActiveCfg = Debug|x64
 		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.Debug|x64.Build.0 = Debug|x64
 		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.Debug|x86.ActiveCfg = Debug|Win32
@@ -74,6 +110,14 @@ Global
 		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.Release|x64.Build.0 = Release|x64
 		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.Release|x86.ActiveCfg = Release|Win32
 		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.Release|x86.Build.0 = Release|Win32
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelDebug|x64.ActiveCfg = ExcelDebug|x64
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelDebug|x64.Build.0 = ExcelDebug|x64
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelDebug|x86.ActiveCfg = ExcelDebug|Win32
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelDebug|x86.Build.0 = ExcelDebug|Win32
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelRelease|x64.ActiveCfg = ExcelRelease|x64
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelRelease|x64.Build.0 = ExcelRelease|x64
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelRelease|x86.ActiveCfg = ExcelRelease|Win32
+		{1B9F07DB-EA75-4B61-815C-0A1232F6CDB2}.ExcelRelease|x86.Build.0 = ExcelRelease|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

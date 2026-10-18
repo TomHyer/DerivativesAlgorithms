@@ -45,6 +45,9 @@
     <ClCompile Include="_Excel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="_Python.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="_JNI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -114,6 +117,9 @@
     <ClCompile Include="MatrixUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Name.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="NDArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -153,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="_Cookie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="_Python.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="_Reader.h">
@@ -222,6 +231,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Numerics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Name.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NDArray.h">

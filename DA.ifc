@@ -6,6 +6,9 @@
 public
 ->MG_#_public.inc
 	ExcelSource
+	FFIViaCookie
+->MG_#_public.py
+	PythonCTypes
 ->MG_#_public.h
 	DotNetHeader
 ->MG_#_public.htm

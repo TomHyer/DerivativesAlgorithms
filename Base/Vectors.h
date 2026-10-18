@@ -57,7 +57,7 @@ public:
 	using std::vector<E_>::clear;
 
 	operator Range_<const E_*>() const { return empty() ? Range_<const E_*>() : Range_<const E_*>(this->base_t::data(), this->base_t::data() + size()); }
-	operator Range_<double*>() const { return empty() ? Range_<E_*>() : Range_<E_*>(this->base_t::data(), this->base_t::data() + size()); }
+	operator Range_<E_*>() const { return empty() ? Range_<E_*>() : Range_<E_*>(this->base_t::data(), this->base_t::data() + size()); }
 	template<class I_> explicit Vector_(const Range_<I_>& src) : base_t(src.begin(), src.end()) {}
 };
 

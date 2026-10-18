@@ -37,6 +37,30 @@ struct ci_traits : std::char_traits<char>
 	{
 		return SortVal(_X) < SortVal(_Y);
 	}
+
+	static constexpr unsigned char Fold(char c) noexcept
+	{
+		auto u = static_cast<unsigned char>(c);
+		return (u >= 'A' && u <= 'Z') ? static_cast<unsigned char>(u + ('a' - 'A')) : u;
+	}	
+	static constexpr int compare(const char* p, const char* q, std::size_t n) noexcept
+	{
+		for (; n; ++p, ++q, --n)
+		{
+			const auto a = Fold(*p), b = Fold(*q);
+			if (a < b) return -1;
+			if (a > b) return 1;
+		}
+		return 0;
+	}
+	static constexpr const char* find(const char* p, std::size_t n, char a) noexcept
+	{
+		const auto key = Fold(a);
+		for (; n; ++p, --n)
+			if (Fold(*p) == key)
+				return p;
+		return nullptr;
+	}
 };
 
 // having String_ be a real class, not just a typedef, lets us forward-declare it

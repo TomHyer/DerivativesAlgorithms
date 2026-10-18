@@ -3,11 +3,6 @@
 
 #pragma once
 
-inline bool TruthValueOf(...)
-{
-#error("No implementation of TruthValueOf exists");
-}
-
 template<class T_> struct Boolean_
 {
 	T_ val_;

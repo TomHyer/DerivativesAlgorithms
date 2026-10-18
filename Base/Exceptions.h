@@ -39,6 +39,9 @@ namespace Exception
 		XStackInfo_(const char* name, const DateTime_& val);
 		XStackInfo_(const char* name, const String_& val);
 		XStackInfo_(const char* msg);	// for VOID type
+		// never use a temporary
+		template<class T_> XStackInfo_(const char* name, T_&&) = delete;
+
 		std::string Message() const;	// not String_ because we need to interact with runtime_error
 	};
 

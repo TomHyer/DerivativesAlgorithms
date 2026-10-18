@@ -11,4 +11,9 @@
 #include "_Excel.h"
 #include "_Repository.h"
 #include "_Reader.h"
+#include "_Cookie.h"
+#include "DateTimeUtils.h"
+#ifndef DA_EXCEL_ONLY
+#include "_Python.h"
+#endif
 //#include "_JNI.h"

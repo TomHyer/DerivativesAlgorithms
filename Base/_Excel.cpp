@@ -2,6 +2,7 @@
 
 #include "Platform.h"
 #include "_Excel.h"
+#include "_Cookie.h"
 #include <algorithm>
 #include <deque>
 #include "XLCALL.h"
