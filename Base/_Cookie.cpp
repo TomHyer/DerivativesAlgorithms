@@ -490,17 +490,21 @@ int CookieInt(int cookie)
 	StashDrop(cookie);
 	return v;
 }
+void DoRequire(bool cond, const char* msg)
+{
+	REQUIRE(cond, msg);
+}
 double CookieDouble(int cookie)
 {
 	const Stashable_& stored = StashFind(cookie);
-	REQUIRE(stored.val_, "No such cookie");
+	DoRequire(!!stored.val_, "No such cookie");
 	double v = 0.0;
 	if (auto p = std::get_if<double>(stored.val_.get()))
 		v = *p;
 	else if (auto pi = std::get_if<int>(stored.val_.get()))
 		v = *pi;
 	else
-		THROW("Input is not numeric");
+		DoRequire(false, "Input is not numeric");
 	StashDrop(cookie);
 	return v;
 }

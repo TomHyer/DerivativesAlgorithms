@@ -10,6 +10,7 @@
 #include "Matrix.h"
 #include "Cell.h"
 #include "Dictionary.h"
+#include "Exceptions.h"
 
 extern "C"
 {
@@ -102,6 +103,23 @@ namespace Cookie
 		const Matrix_<Cell_>& MatrixCell(int cookie, bool optional = false);
 		const Vector_<Cell_>& VectorCell(int cookie, bool optional = false);
 		const Dictionary_& Dict(int cookie, bool optional = false);
+
+		// Enum inputs arrive as a string cookie.  Machinist emits get.String<Enum_>(cookie).
+		template<class T_> T_ String(int cookie, bool optional = false)
+		{
+			if (cookie == 0)
+			{
+				REQUIRE(optional, "Missing input");
+				return T_();
+			}
+			used_.push_back(cookie);	// destructor drops it if the copy throws
+			const char* owned = CookieStringCopy(cookie);	// drops the cookie
+			String_ s(owned ? owned : "");
+			CookieFreeString(const_cast<char*>(owned));
+			if (optional && s.empty())
+				return T_();
+			return T_(s);
+		}
 	};
 
 	class BASE_EXPORT Output_

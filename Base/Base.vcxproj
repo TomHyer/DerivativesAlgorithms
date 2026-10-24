@@ -272,7 +272,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-    <AdditionalLibraryDirectories>$(PythonHome)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories><AdditionalDependencies>python39.lib;%(AdditionalDependencies)</AdditionalDependencies></Link>
+    <AdditionalLibraryDirectories>$(PythonHome)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories><AdditionalDependencies>$(PythonLib);%(AdditionalDependencies)</AdditionalDependencies></Link>
     <PreBuildEvent>
       <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Base.mgl</Command>
     </PreBuildEvent>
@@ -296,7 +296,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-    <AdditionalLibraryDirectories>$(PythonHome)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories><AdditionalDependencies>python39.lib;%(AdditionalDependencies)</AdditionalDependencies></Link>
+    <AdditionalLibraryDirectories>$(PythonHome)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories><AdditionalDependencies>$(PythonLib);%(AdditionalDependencies)</AdditionalDependencies></Link>
     <PreBuildEvent>
       <Command>cd /d $(ProjectDir) &amp; $(MACHINIST_DIR)\Machinist.exe -c ..\DA.ifc -l ..\Common.mgl -l Base.mgl</Command>
     </PreBuildEvent>
